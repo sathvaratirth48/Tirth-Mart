@@ -1,0 +1,227 @@
+{% extends 'userapp/master.html' %}
+{% load static %}
+{% block content %}
+
+<section class="page-banner">
+  <div class="container">
+    <h1>Checkout</h1>
+    <div class="breadcrumb-nav"><a href="{% url 'index' %}">Home</a> / <a href="{% url 'cart' %}">Cart</a> / <span>Checkout</span></div>
+  </div>
+</section>
+
+<section class="section-pad">
+  <div class="container">
+    {% if form.non_field_errors %}
+      <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+    {% endif %}
+    <form method="post" id="checkoutForm" novalidate>
+      {% csrf_token %}
+      <div class="row gy-4">
+        <div class="col-lg-7">
+
+          <!-- Delivery Details -->
+          <div class="cart-items-card p-4 mb-4">
+            <h5 class="mb-3"><i class="bi bi-geo-alt me-2"></i>Delivery Details</h5>
+
+            <div class="mb-3">
+              <label class="form-label">{{ form.contact_name.label }}</label>
+              {{ form.contact_name }}
+              {% for error in form.contact_name.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">{{ form.contact_phone.label }}</label>
+              {{ form.contact_phone }}
+              {% for error in form.contact_phone.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+              <small class="text-muted">Used by the delivery boy to contact you.</small>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" value="{{ request.user.email }}" disabled>
+            </div>
+
+            <div class="mb-1">
+              <label class="form-label">{{ form.delivery_address.label }}</label>
+              {{ form.delivery_address }}
+              {% for error in form.delivery_address.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+            </div>
+          </div>
+
+          <!-- Payment Method -->
+          <div class="cart-items-card p-4">
+            <h5 class="mb-3"><i class="bi bi-wallet2 me-2"></i>Payment Method</h5>
+
+            <div class="payment-option-list">
+              <label class="payment-option">
+                <input type="radio" name="payment_method" value="cod" checked>
+                <span class="po-icon"><i class="bi bi-cash-coin"></i></span>
+                <span class="po-label">Cash on Delivery</span>
+              </label>
+
+              <label class="payment-option">
+                <input type="radio" name="payment_method" value="gpay">
+                <span class="po-icon"><i class="bi bi-google"></i></span>
+                <span class="po-label">Google Pay (UPI)</span>
+              </label>
+
+              <label class="payment-option">
+                <input type="radio" name="payment_method" value="phonepe">
+                <span class="po-icon"><i class="bi bi-phone-fill"></i></span>
+                <span class="po-label">PhonePe (UPI)</span>
+              </label>
+
+              <label class="payment-option">
+                <input type="radio" name="payment_method" value="paytm">
+                <span class="po-icon"><i class="bi bi-credit-card-2-front"></i></span>
+                <span class="po-label">Paytm (UPI)</span>
+              </label>
+
+              <label class="payment-option">
+                <input type="radio" name="payment_method" value="upi">
+                <span class="po-icon"><i class="bi bi-qr-code"></i></span>
+                <span class="po-label">Other UPI App</span>
+              </label>
+            </div>
+            <small class="text-muted d-block mt-2">
+              <i class="bi bi-shield-check me-1"></i>UPI payments are sent directly to the store's UPI ID via your chosen app.
+            </small>
+          </div>
+
+        </div>
+
+        <div class="col-lg-5">
+          <div class="cart-summary-card p-4">
+            <h5 class="mb-3">Order Summary</h5>
+            <ul class="list-unstyled mb-3">
+              {% for item in items %}
+              <li class="d-flex justify-content-between py-2 border-bottom">
+                <span>{{ item.product.name }} <small class="text-muted">x{{ item.quantity }}</small></span>
+                <span>₹{{ item.subtotal }}</span>
+              </li>
+              {% endfor %}
+            </ul>
+            <div class="summary-row d-flex justify-content-between">
+              <span>Subtotal</span>
+              <span id="co-subtotal">₹{{ subtotal }}</span>
+            </div>
+            <div class="summary-row d-flex justify-content-between">
+              <span>Delivery Charge</span>
+              <span>{% if delivery_charge == 0 %}Free{% else %}₹{{ delivery_charge }}{% endif %}</span>
+            </div>
+
+            <!-- Promo Code Input -->
+            <div class="mt-3 mb-2">
+              <div class="input-group">
+                <input type="text" id="promoInput" placeholder="Promo code (e.g. TIRTH50)" class="form-control" style="text-transform:uppercase;">
+                <button type="button" id="promoApplyBtn" class="btn btn-outline-secondary">Apply</button>
+              </div>
+              <div id="promoMsg" class="small mt-1"></div>
+            </div>
+
+            <!-- Promo Discount Row (hidden until applied) -->
+            <div class="summary-row d-flex justify-content-between text-success" id="promoDiscountRow" style="display:none!important;">
+              <span>🎉 Promo Discount (10%)</span>
+              <span id="promoDiscountAmt">-₹0</span>
+            </div>
+
+            <input type="hidden" name="promo_code" id="promoCodeHidden" value="">
+
+            <hr>
+            <div class="d-flex justify-content-between fw-bold fs-5">
+              <span>Total</span>
+              <span id="co-total">₹{{ grand_total }}</span>
+            </div>
+
+            <button type="submit" class="btn-primary-custom w-100 justify-content-center mt-4" id="placeOrderBtn">
+              <span id="placeOrderText"><i class="bi bi-check-circle me-2"></i>Place Order</span>
+              <span id="placeOrderSpinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+
+<style>
+.payment-option-list { display: flex; flex-direction: column; gap: 10px; }
+.payment-option {
+  display: flex; align-items: center; gap: 12px;
+  border: 1px solid var(--line); border-radius: var(--radius-sm, 10px);
+  padding: 12px 14px; cursor: pointer; transition: .2s;
+}
+.payment-option:hover { border-color: var(--peacock); background: var(--bg-soft); }
+.payment-option input[type="radio"]:checked ~ .po-label { color: var(--peacock); font-weight: 700; }
+.payment-option:has(input:checked) { border-color: var(--peacock); background: var(--bg-soft); }
+.po-icon { font-size: 1.2rem; width: 28px; text-align: center; }
+</style>
+
+<script>
+const BASE_SUBTOTAL = {{ subtotal }};
+const DELIVERY = {{ delivery_charge }};
+let promoDiscount = 0;
+
+function recalcTotal() {
+  const total = BASE_SUBTOTAL + DELIVERY - promoDiscount;
+  document.getElementById('co-total').textContent = '₹' + total;
+}
+
+document.getElementById('promoApplyBtn').addEventListener('click', function () {
+  const code = document.getElementById('promoInput').value.trim().toUpperCase();
+  const msgEl = document.getElementById('promoMsg');
+  const discRow = document.getElementById('promoDiscountRow');
+  const discAmt = document.getElementById('promoDiscountAmt');
+  const hidden = document.getElementById('promoCodeHidden');
+
+  if (!code) { msgEl.innerHTML = '<span class="text-danger">Please enter a promo code.</span>'; return; }
+
+  fetch("{% url 'validate_promo' %}", {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-CSRFToken': '{{ csrf_token }}' },
+    body: 'code=' + encodeURIComponent(code),
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.valid) {
+      promoDiscount = Math.round(BASE_SUBTOTAL * data.discount_pct / 100);
+      discAmt.textContent = '-₹' + promoDiscount;
+      discRow.style.setProperty('display', 'flex', 'important');
+      hidden.value = code;
+      msgEl.innerHTML = '<span class="text-success">' + data.message + '</span>';
+      recalcTotal();
+      document.getElementById('promoApplyBtn').textContent = '✓ Applied';
+      document.getElementById('promoApplyBtn').disabled = true;
+      document.getElementById('promoInput').disabled = true;
+    } else {
+      promoDiscount = 0;
+      discRow.style.setProperty('display', 'none', 'important');
+      hidden.value = '';
+      msgEl.innerHTML = '<span class="text-danger">' + data.message + '</span>';
+      recalcTotal();
+    }
+  });
+});
+
+document.getElementById('checkoutForm').addEventListener('submit', function (e) {
+  // basic client-side checks before showing spinner (server still validates)
+  const phone = this.querySelector('input[name="contact_phone"]').value.trim();
+  const address = this.querySelector('textarea[name="delivery_address"]').value.trim();
+  const name = this.querySelector('input[name="contact_name"]').value.trim();
+
+  if (!name || !phone || !address) {
+    return; // let HTML5 / server validation show the errors
+  }
+  if (!/^\d{10}$/.test(phone)) {
+    e.preventDefault();
+    showToast('Please enter a valid 10-digit phone number', 'error');
+    return;
+  }
+
+  document.getElementById('placeOrderText').classList.add('d-none');
+  document.getElementById('placeOrderSpinner').classList.remove('d-none');
+  document.getElementById('placeOrderBtn').disabled = true;
+});
+</script>
+
+{% endblock %}

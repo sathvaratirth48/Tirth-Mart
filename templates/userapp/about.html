@@ -1,0 +1,161 @@
+{% extends 'userapp/master.html' %}
+{% load static %}
+{% block content %}
+
+<!-- Banner -->
+<section class="page-banner">
+  <div class="container">
+    <h1>About Tirth Mart</h1>
+    <div class="breadcrumb-nav"><a href="{% url 'index' %}">Home</a> / <span>About Us</span></div>
+  </div>
+</section>
+
+<!-- Hero About -->
+<section class="section-pad">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6">
+        <span style="color:var(--peacock);font-weight:700;text-transform:uppercase;letter-spacing:2px;font-size:.85rem">Who We Are</span>
+        <h2 style="font-size:2.4rem;font-weight:800;margin-top:8px;line-height:1.2">Your Trusted Local<br>Snack &amp; Sweets Store 🛒</h2>
+        <p class="text-muted mt-3" style="font-size:1.05rem;line-height:1.8">
+          Tirth Mart is an online grocery and snack store based in Ahmedabad, Gujarat.
+          We bring the freshest namkeen, sweets, chocolates, cold drinks, instant food
+          and festive combos right to your doorstep — fast, fresh, and affordable.
+        </p>
+        <p class="text-muted" style="line-height:1.8">
+          Founded with a simple idea — <strong>make everyday snacking delightful</strong> — 
+          we've grown from a small neighbourhood store into a trusted online marketplace
+          loved by thousands of families across the city.
+        </p>
+        <div class="d-flex flex-wrap gap-3 mt-4">
+          <a href="{% url 'shop_page' %}" class="btn-primary-custom"><i class="bi bi-bag me-2"></i>Shop Now</a>
+          <a href="{% url 'contact' %}" class="btn btn-outline-custom">Contact Us</a>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="row g-3">
+          <div class="col-6">
+            <div class="text-center p-4 rounded-3" style="background:linear-gradient(135deg,#e8f4fd,#c8e6f9)">
+              <div style="font-size:2.8rem">🛒</div>
+              <div style="font-size:2rem;font-weight:800;color:var(--peacock)">24+</div>
+              <div class="small text-muted fw-semibold">Product Categories</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="text-center p-4 rounded-3" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7)">
+              <div style="font-size:2.8rem">😊</div>
+              <div style="font-size:2rem;font-weight:800;color:#16a34a">500+</div>
+              <div class="small text-muted fw-semibold">Happy Customers</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="text-center p-4 rounded-3" style="background:linear-gradient(135deg,#fff7ed,#fed7aa)">
+              <div style="font-size:2.8rem">🚚</div>
+              <div style="font-size:2rem;font-weight:800;color:#ea580c">Same Day</div>
+              <div class="small text-muted fw-semibold">Delivery Available</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="text-center p-4 rounded-3" style="background:linear-gradient(135deg,#fdf4ff,#f3e8ff)">
+              <div style="font-size:2.8rem">⭐</div>
+              <div style="font-size:2rem;font-weight:800;color:#9333ea">4.8★</div>
+              <div class="small text-muted fw-semibold">Average Rating</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Our Values -->
+<section style="background:var(--bg-soft,#f8fafc);padding:60px 0">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 style="font-weight:800">Why Choose Tirth Mart?</h2>
+      <p class="text-muted">We put quality, freshness, and your convenience first — every single day.</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="text-center p-4 bg-white rounded-3 shadow-sm h-100">
+          <div style="font-size:2.5rem;margin-bottom:12px">🌿</div>
+          <h5 class="fw-bold">Fresh & Quality Products</h5>
+          <p class="text-muted small">Every product is carefully sourced and quality-checked before listing. No expired stock, ever.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="text-center p-4 bg-white rounded-3 shadow-sm h-100">
+          <div style="font-size:2.5rem;margin-bottom:12px">⚡</div>
+          <h5 class="fw-bold">Fast Delivery</h5>
+          <p class="text-muted small">Same-day delivery available within Ahmedabad. Free delivery on orders above ₹499. Real-time tracking included.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="text-center p-4 bg-white rounded-3 shadow-sm h-100">
+          <div style="font-size:2.5rem;margin-bottom:12px">💰</div>
+          <h5 class="fw-bold">Best Prices</h5>
+          <p class="text-muted small">Competitive prices, regular discounts, and promo codes (try TIRTH50!) so you always get the best deal.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="text-center p-4 bg-white rounded-3 shadow-sm h-100">
+          <div style="font-size:2.5rem;margin-bottom:12px">🔒</div>
+          <h5 class="fw-bold">Secure Payments</h5>
+          <p class="text-muted small">Pay via Cash on Delivery, Google Pay, PhonePe, or Paytm. All UPI transactions are encrypted and secure.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="text-center p-4 bg-white rounded-3 shadow-sm h-100">
+          <div style="font-size:2.5rem;margin-bottom:12px">🎁</div>
+          <h5 class="fw-bold">Festival Combos</h5>
+          <p class="text-muted small">Special hampers and combo packs for Diwali, Holi, Raksha Bandhan — perfect for gifting.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="text-center p-4 bg-white rounded-3 shadow-sm h-100">
+          <div style="font-size:2.5rem;margin-bottom:12px">🤝</div>
+          <h5 class="fw-bold">24/7 Support</h5>
+          <p class="text-muted small">Our team is always ready to help with orders, payments, returns, or anything else you need.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Team -->
+<section class="section-pad">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 style="font-weight:800">Our Story</h2>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="p-4 rounded-3" style="background:linear-gradient(135deg,#e8f4fd,#f0fdf4);border-left:4px solid var(--peacock)">
+          <p style="font-size:1.1rem;line-height:1.9;color:#334155">
+            🌟 Tirth Mart started with a passion for bringing authentic Indian snacks and sweets to every home.
+            What began as a small WhatsApp-based order system in 2024 has grown into a full-featured eCommerce
+            platform — built with love by a team of developers and snack enthusiasts from Gujarat.
+          </p>
+          <p style="font-size:1.1rem;line-height:1.9;color:#334155">
+            We believe that good food brings people together. Whether it's Kurkure for movie night,
+            Kaju Katli for festivals, or a hot Samosa on a rainy evening — Tirth Mart has got you covered.
+            Our promise: <strong>Fresh. Fast. Affordable.</strong>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="background:var(--peacock,#0d6efd);padding:60px 0;text-align:center">
+  <div class="container">
+    <h2 style="color:#fff;font-weight:800;font-size:2rem">Ready to Order?</h2>
+    <p style="color:rgba(255,255,255,.85);margin:12px 0 24px">Explore 100+ products and get them delivered today!</p>
+    <a href="{% url 'shop_page' %}" class="btn btn-light btn-lg px-5 fw-bold">
+      🛒 Shop Now
+    </a>
+  </div>
+</section>
+
+{% endblock %}

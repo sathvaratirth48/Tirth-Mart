@@ -1,0 +1,70 @@
+{% extends 'adminapp/master.html' %}
+{% load static %}
+{% block content %}
+
+<div class="nxl-content">
+    <div class="page-header">
+        <div class="page-header-left d-flex align-items-center">
+            <div class="page-header-title">
+                <h5 class="m-b-10">Edit Profile</h5>
+            </div>
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'admin_index' %}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'admin_profile_view' %}">Profile</a></li>
+                <li class="breadcrumb-item">Edit</li>
+            </ul>
+        </div>
+        <div class="page-header-right">
+            <a href="{% url 'admin_profile_view' %}" class="btn btn-outline-dark">
+                <i class="feather-arrow-left"></i> Back to Profile
+            </a>
+        </div>
+    </div>
+
+    <section class="section mt-4 mx-auto">
+        <div class="row justify-content-center">
+            <div class="col-lg-7">
+                <div class="card">
+                    <div class="card-body p-4">
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                            {% endfor %}
+                        {% endif %}
+
+                        <div class="text-center mb-4">
+                            {% if user.profile_image %}
+                                <img src="{{ user.profile_image.url }}" alt="{{ user.username }}"
+                                     class="rounded-circle" style="width:90px;height:90px;object-fit:cover;">
+                            {% else %}
+                                <div class="avatar-initials mx-auto" style="width:90px;height:90px;font-size:2rem;">
+                                    {{ user.username|slice:":1"|upper }}{% if user.username|length > 1 %}{{ user.username|slice:"1:2"|upper }}{% endif %}
+                                </div>
+                            {% endif %}
+                            <h5 class="mt-2 mb-0">{{ user.username }}</h5>
+                            <small class="text-muted">{{ user.role }}</small>
+                        </div>
+
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {% for field in form %}
+                            <div class="mb-3">
+                                <label class="form-label">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.errors %}
+                                    <div class="text-danger small">{{ field.errors }}</div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="bi bi-check-circle me-2"></i>Save Changes
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+{% endblock %}

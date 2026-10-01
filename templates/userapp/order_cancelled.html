@@ -1,0 +1,76 @@
+{% extends 'userapp/master.html' %}
+{% load static %}
+{% block content %}
+
+<section class="page-banner">
+  <div class="container">
+    <h1>Order Cancelled</h1>
+    <div class="breadcrumb-nav"><a href="{% url 'index' %}">Home</a> / <a href="{% url 'order_list' %}">My Orders</a> / <span>{{ order.display_id }} Cancelled</span></div>
+  </div>
+</section>
+
+<section class="section-pad">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-6 text-center">
+        <div class="cart-items-card p-5">
+
+          <div class="mb-3" style="font-size:4rem">❌</div>
+          <h3 class="mb-2">{{ order.display_id }} Cancelled</h3>
+
+          {% if messages %}
+            {% for message in messages %}
+              <p class="text-muted">{{ message }}</p>
+            {% endfor %}
+          {% else %}
+            <p class="text-muted">Your order has been cancelled successfully.</p>
+          {% endif %}
+
+          {% if order.payment %}
+            {% if order.payment.payment_status == 'refunded' %}
+            <div class="alert alert-success mt-3">
+              <i class="bi bi-cash-coin me-2"></i>
+              <strong>Refund Initiated</strong> — ₹{{ order.total_amount }} will be credited to your account within 5–7 working days.
+            </div>
+            {% endif %}
+          {% endif %}
+
+          <hr class="my-4">
+
+          <div class="mb-3">
+            <div class="text-muted small mb-1">Redirecting to Home in</div>
+            <div class="fs-1 fw-bold text-peacock" id="countdown">60</div>
+            <div class="text-muted small">seconds</div>
+          </div>
+
+          <div class="d-flex gap-3 justify-content-center mt-4">
+            <a href="{% url 'index' %}" class="btn-primary-custom">
+              <i class="bi bi-house me-2"></i>Go Home Now
+            </a>
+            <a href="{% url 'shop_page' %}" class="btn btn-outline-custom">
+              <i class="bi bi-bag me-2"></i>Continue Shopping
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function () {
+  let secs = 60;
+  const el = document.getElementById('countdown');
+  const interval = setInterval(function () {
+    secs--;
+    el.textContent = secs;
+    if (secs <= 0) {
+      clearInterval(interval);
+      window.location.href = '/';
+    }
+  }, 1000);
+})();
+</script>
+
+{% endblock %}

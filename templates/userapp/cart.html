@@ -1,0 +1,211 @@
+{% extends 'userapp/master.html' %}
+{% load static %}
+{% block content %}
+
+<!-- PAGE BANNER -->
+<section class="page-banner">
+  <div class="container">
+    <h1>Your Cart</h1>
+    <div class="breadcrumb-nav"><a href="{% url 'index' %}">Home</a> / <span>Cart</span></div>
+  </div>
+</section>
+
+<!-- CART CONTENT -->
+<section class="section-pad">
+  <div class="container">
+    <div class="row gy-4">
+      <!-- CART ITEMS COLUMN -->
+      <div class="col-lg-8">
+        <div class="cart-items-card">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Product Image</th>
+                  <th>Product</th>
+                  <th>Price</th>
+                  <th>Quantity</th>
+                  <th>Total</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="cart-table-body">
+                <!-- Populated by cartLoadItems() -->
+              </tbody>
+            </table>
+          </div>
+          <div style="text-align: center; padding: 20px; color: #666; display:none;" id="empty-cart-msg">
+            Your cart is empty. <a href="{% url 'shop_page' %}" class="text-primary">Continue Shopping</a>
+          </div>
+          <div class="cart-actions mt-4">
+            <a href="{% url 'shop_page' %}" class="btn btn-outline-primary">
+              <i class="bi bi-arrow-left"></i> Continue Shopping
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ORDER SUMMARY COLUMN -->
+      <div class="col-lg-4">
+        <div class="order-summary-card cart-summary-sticky">
+          <h5 class="mb-3">Order Summary</h5>
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <span id="cart-subtotal">₹0</span>
+          </div>
+          <div class="summary-row">
+            <span>Delivery Charge</span>
+            <span id="cart-delivery">₹49</span>
+          </div>
+          <div class="promo-input-wrap mt-3 mb-3">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Promo code" id="promo-code-input">
+              <button class="btn btn-outline-secondary" type="button" onclick="showToast('Promo code feature coming soon!','info')">Apply</button>
+            </div>
+          </div>
+          <hr>
+          <div class="summary-row summary-total">
+            <strong>Total</strong>
+            <strong id="cart-grand-total">₹0</strong>
+          </div>
+          <a href="{% url 'checkout' %}" class="btn-primary-custom w-100 text-center justify-content-center mt-3">Proceed to Checkout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES SECTION -->
+<section class="features-section">
+  <div class="container">
+    <div class="row g-3">
+      <div class="col-md-3 col-sm-6">
+        <div class="feature-card">
+          <i class="bi bi-truck"></i>
+          <h6>Free Delivery</h6>
+          <p>On orders above ₹499</p>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="feature-card">
+          <i class="bi bi-shield-check"></i>
+          <h6>100% Secure</h6>
+          <p>Safe &amp; encrypted payments</p>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="feature-card">
+          <i class="bi bi-arrow-counterclockwise"></i>
+          <h6>Easy Returns</h6>
+          <p>30-day return policy</p>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="feature-card">
+          <i class="bi bi-headset"></i>
+          <h6>24/7 Support</h6>
+          <p>Dedicated customer care</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  function cartLoadItems() {
+    const tbody = document.getElementById("cart-table-body");
+    const emptyMsg = document.getElementById("empty-cart-msg");
+
+    fetch("/api/cart/")
+      .then(res => res.json())
+      .then(data => {
+        const cart = data.cart;
+
+        if (!cart.length) {
+          tbody.innerHTML = "";
+          emptyMsg.style.display = "block";
+          document.getElementById("cart-subtotal").textContent = "₹0";
+          document.getElementById("cart-grand-total").textContent = "₹0";
+          updateCartBadge(0);
+          return;
+        }
+
+        emptyMsg.style.display = "none";
+
+        let rows = "";
+        let totalQty = 0;
+        cart.forEach(i => {
+          totalQty += i.qty;
+          rows += `
+            <tr>
+                <td><img src="${i.img}" width="60" alt="${i.name}"></td>
+                <td>${i.name}</td>
+                <td>₹${i.price}</td>
+                <td>
+                    <div class="qty-stepper">
+                        <button type="button" class="qty-btn" onclick="cartUpdateQty(${i.id}, ${i.qty - 1})">-</button>
+                        <span class="qty-num" id="qty-${i.id}">${i.qty}</span>
+                        <button type="button" class="qty-btn" onclick="cartUpdateQty(${i.id}, ${i.qty + 1})">+</button>
+                    </div>
+                </td>
+                <td>₹${i.subtotal}</td>
+                <td>
+                    <button class="btn btn-sm btn-outline-danger" onclick="cartRemoveItem(${i.id})">
+                        Delete
+                    </button>
+                </td>
+            </tr>`;
+        });
+
+        tbody.innerHTML = rows;
+
+        const delivery = data.total > 499 ? 0 : 49;
+        document.getElementById("cart-subtotal").textContent = `₹${data.total}`;
+        document.getElementById("cart-delivery").textContent = delivery === 0 ? "Free" : `₹${delivery}`;
+        document.getElementById("cart-grand-total").textContent = `₹${data.total + delivery}`;
+        updateCartBadge(totalQty);
+      });
+  }
+
+  function cartUpdateQty(itemId, qty) {
+    if (qty < 1) {
+      cartRemoveItem(itemId);
+      return;
+    }
+    fetch("/api/cart/update/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "X-CSRFToken": getCookie("csrftoken")
+      },
+      body: `item_id=${itemId}&quantity=${qty}`
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === "error") {
+          showToast(data.message || "Could not update quantity", "error");
+        }
+        cartLoadItems();
+      });
+  }
+
+  function cartRemoveItem(itemId) {
+    fetch("/api/cart/remove/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "X-CSRFToken": getCookie("csrftoken")
+      },
+      body: `item_id=${itemId}`
+    })
+      .then(res => res.json())
+      .then(() => {
+        showToast("Item removed from cart");
+        cartLoadItems();
+      });
+  }
+
+  document.addEventListener("DOMContentLoaded", cartLoadItems);
+</script>
+
+{% endblock %}

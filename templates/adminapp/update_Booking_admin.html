@@ -1,0 +1,420 @@
+{% extends 'adminapp/master.html' %}
+{% load static %}
+{% block content %}
+
+<!-- Page Header Start -->
+<div class="container-fluid page-header d-flex align-items-center justify-content-center" style="min-height: 550px;">
+
+    <div class="text-center">
+        <h1 class="display-1 text-uppercase text-white mb-3">
+            E-Cycle Booking
+        </h1>
+
+        <div class="d-inline-flex text-white">
+            <h6 class="text-uppercase m-0">
+                <a class="text-white" href="">Home</a>
+            </h6>
+            <h6 class="text-body m-0 px-3">/</h6>
+            <h6 class="text-uppercase text-body m-0">
+                E-Cycle Booking
+            </h6>
+        </div>
+    </div>
+
+</div>
+<!-- Page Header End -->
+
+<!-- Detail Start -->
+<div class="container-fluid pt-5">
+    <div class="container pt-5 pb-3">
+        <h1 class="display-4 text-uppercase mb-5">CityCycle E-Volt X1</h1>
+        <div class="row align-items-center pb-2">
+            <div class="col-lg-6 mb-4">
+                <img class="img-fluid" src="{% static 'userapp/img/bg-banner.jpg' %}" alt="">
+            </div>
+            <div class="col-lg-6 mb-4">
+                <h4 class="mb-2">₹199 / Day</h4>
+                <div class="d-flex mb-3">
+                    <h6 class="mr-2">Rating:</h6>
+                    <div class="d-flex align-items-center justify-content-center mb-1">
+                        <small class="fa fa-star text-primary mr-1"></small>
+                        <small class="fa fa-star text-primary mr-1"></small>
+                        <small class="fa fa-star text-primary mr-1"></small>
+                        <small class="fa fa-star text-primary mr-1"></small>
+                        <small class="fa fa-star-half-alt text-primary mr-1"></small>
+                        <small>(412 Reviews)</small>
+                    </div>
+                </div>
+                <p>
+                    Experience smart and eco-friendly travel with the CityCycle E-Volt X1.
+                    Designed for daily commuters and city explorers, this lightweight
+                    and comfortable bicycle offers smooth riding, strong braking system,
+                    and durable frame quality. Perfect for short trips, office travel,
+                    and fitness rides across the city. Enjoy affordable, sustainable
+                    and hassle-free mobility with CityCycle.
+                </p>
+                <div class="d-flex pt-1">
+                    <h6>Share on:</h6>
+                    <div class="d-inline-flex">
+                        <a class="px-2" href=""><i class="fab fa-facebook-f"></i></a>
+                        <a class="px-2" href=""><i class="fab fa-twitter"></i></a>
+                        <a class="px-2" href=""><i class="fab fa-linkedin-in"></i></a>
+                        <a class="px-2" href=""><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-n3 mt-lg-0 pb-4">
+            <div class="col-md-3 col-6 mb-2">
+                <i class="fa fa-bicycle text-primary mr-2"></i>
+                <span>Model: 2026</span>
+            </div>
+            <div class="col-md-3 col-6 mb-2">
+                <i class="fa fa-bolt text-primary mr-2"></i>
+                <span>Electric Motor</span>
+            </div>
+            <div class="col-md-3 col-6 mb-2">
+                <i class="fa fa-road text-primary mr-2"></i>
+                <span>Range: 80km/Charge</span>
+            </div>
+            <div class="col-md-3 col-6 mb-2">
+                <i class="fa fa-tachometer-alt text-primary mr-2"></i>
+                <span>Top Speed: 25 km/h</span>
+            </div>
+            <div class="col-md-3 col-6 mb-2">
+                <i class="fa fa-battery-full text-primary mr-2"></i>
+                <span>36V Lithium Battery</span>
+            </div>
+            <div class="col-md-3 col-6 mb-2">
+                <i class="fa fa-plug text-primary mr-2"></i>
+                <span>Charging Time: 3-4 Hours</span>
+            </div>
+            <div class="col-md-3 col-6 mb-2">
+                <i class="fa fa-qrcode text-primary mr-2"></i>
+                <span>Smart QR Unlock</span>
+            </div>
+            <div class="col-md-3 col-6 mb-2">
+                <i class="fa fa-map-marker-alt text-primary mr-2"></i>
+                <span>GPS Tracking Enabled</span>
+            </div>
+            <div class="col-md-3 col-6 mb-2">
+                <i class="fa fa-tv text-primary mr-2"></i>
+                <span>Digital Display</span>
+            </div>
+            <div class="col-md-3 col-6 mb-2">
+                <i class="fa fa-stop-circle text-primary mr-2"></i>
+                <span>Dual Disc Brakes</span>
+            </div>
+            <div class="col-md-3 col-6 mb-2">
+                <i class="fa fa-lightbulb text-primary mr-2"></i>
+                <span>LED Headlight</span>
+            </div>
+            <div class="col-md-3 col-6 mb-2">
+                <i class="fa fa-leaf text-primary mr-2"></i>
+                <span>Eco-Friendly Ride</span>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Detail End --> 
+
+
+<!-- E-Cycle Booking Start --> 
+<div class="container-fluid pb-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <h2 class="mb-4">Personal Detail</h2>
+                <div class="mb-5">
+                    <div class="row">
+                        <div class="col-6 form-group">
+                            <input type="text" class="form-control p-4" placeholder="First Name" required="required">
+                        </div>
+                        <div class="col-6 form-group">
+                            <input type="text" class="form-control p-4" placeholder="Last Name" required="required">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 form-group">
+                            <input type="email" class="form-control p-4" placeholder="Your Email" required="required">
+                        </div>
+                        <div class="col-6 form-group">
+                            <input type="number" class="form-control p-4" placeholder="Mobile Number"
+                                required="required">
+                        </div>
+                    </div>
+                </div>
+                <h2 class="mb-4">Booking Detail</h2>
+                <div class="mb-5">
+                    <form method="post" enctype="multipart/form-data" action="{% url 'update_Booking_admin' booking1.id %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ next }}">
+                        <div class="row justify-content-center">
+                            <div class="col-md-12 form-group">
+                                <select name="vehicle" class="custom-select px-4 text-center" style="height: 50px;">
+                                    <option value="">Select Vehicle</option>
+                                    {% for i in vehicles %}
+                                    <option value="{{ i.id }}" {% if i.id == booking1.vehicle.id %}selected{% endif %}>
+                                        {{ i.vehicle_name }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 form-group">
+                                <select name="pickup_location" class="custom-select px-4" style="height: 50px;" required>
+                                    <!-- Default option -->
+                                    <option value="">Pickup Location</option>
+                                    <option value="Location 1" {% if booking1.pickup_location == "Location 1" %}selected{% endif %}>Location 1</option>
+                                    <option value="Location 2" {% if booking1.pickup_location == "Location 2" %}selected{% endif %}>Location 2</option>
+                                    <option value="Location 3" {% if booking1.pickup_location == "Location 3" %}selected{% endif %}>Location 3</option>
+
+                                </select>
+                            </div>
+                            <div class="col-6 form-group">
+                                <select name="dropoff_location" class="custom-select px-4" style="height: 50px;"
+                                    required>
+
+                                    <option value="">Drop Location</option>
+
+                                    <option value="Location 1" {% if booking1.dropoff_location == "Location 1"%}selected{% endif %}>
+                                        Location 1</option>
+
+                                    <option value="Location 2" {% if booking1.dropoff_location == "Location 2"%}selected{% endif %}>
+                                        Location 2</option>
+
+                                    <option value="Location 3" {% if booking1.dropoff_location == "Location 3"%}selected{% endif %}>
+                                        Location 3</option>
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 form-group">
+                                <div class="time" id="time2" data-target-input="nearest">
+                                    <input name="start_time" value="{{ booking1.start_time|time:'h:i A' }}"class="form-control p-4 datetimepicker-input"placeholder="Start Time"data-target="#time2" data-toggle="datetimepicker" />
+                                </div>
+                            </div>
+                            <div class="col-6 form-group">
+                                <div class="time" id="time3" data-target-input="nearest">
+                                    <input name="end_time" value="{{ booking1.end_time|time:'h:i A' }}"class="form-control p-4 datetimepicker-input"placeholder="End Time"data-target="#time3" data-toggle="datetimepicker" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 form-group">
+                                <select name="adult" class="custom-select px-4" style="height: 50px;" required>
+
+                                    <option value="">Select Adult</option>
+
+                                    <option value="1" {% if booking1.adult == 1 %}selected{% endif %}>
+                                        Adult 1</option>
+
+                                    <option value="2" {% if booking1.adult == 2 %}selected{% endif %}>
+                                        Adult 2</option>
+
+                                    <option value="3" {% if booking1.adult == 3 %}selected{% endif %}>
+                                        Adult 3</option>
+
+                                </select>
+                            </div>
+                            <div class="col-6 form-group">
+                                <select name="child" class="custom-select px-4" style="height: 50px;">
+
+                                    <option value="">Select Child</option>
+
+                                    <option value="0" {% if booking1.child == 0 %}selected{% endif %}>
+                                        No Child </option>
+
+                                    <option value="1" {% if booking1.child == 1 %}selected{% endif %}>
+                                        Child 1</option>
+
+                                    <option value="2" {% if booking1.child == 2 %}selected{% endif %}>
+                                        Child 2</option>
+
+                                    <option value="3" {% if booking1.child == 3 %}selected{% endif %}>
+                                        Child 3</option>
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row"> 
+                            <div class="col-6 form-group">
+                                <div class="date" id="date2" data-target-input="nearest">
+                                    <input type="text" 
+                                    name="booking_date" 
+                                    value="{{ booking1.booking_date|date:'d-m-Y' }}" 
+                                    class="form-control p-4 datetimepicker-input" 
+                                    placeholder="Booking Date"
+                                    data-target="#date2" 
+                                    data-toggle="datetimepicker" />
+                                </div>
+                            </div>
+                            <div class="col-6 form-group">
+                                <label><strong>Booking Status:</strong></label><br>
+                                <span class="badge bg-warning text-dark px-3 py-2">
+                                    Pending
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 form-group">
+                                <input type="number" name="total_amount" value="{{ booking1.total_amount}}"
+                                    class="form-control p-4" placeholder="Total Amount" required="required">
+                            </div>
+                            <div class="col-6 form-group">
+                                <input type="number" name="total_hours" value="{{ booking1.total_hours}}"
+                                    class="form-control p-4" placeholder="Total Hours" required="required">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <textarea class="form-control py-3 px-4" rows="3" name="special_requests" placeholder="Special Request" required="required">{{ booking1.special_requests }}</textarea>
+                        </div>
+                        <input type="hidden" name="cancel_reason"       value="">
+                        <input type="hidden" name="cancel_reason_other" value="">
+                        <input type="hidden" name="refund_amount"       value="0">
+                        <input type="hidden" name="refund_status"       value="None">
+                        <button class="btn btn-block btn-primary py-3">Book Your Ride</button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="bg-secondary p-5 mb-5">
+                    <h2 class="text-primary mb-4">Payment</h2>
+                    <div class="form-group">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" class="custom-control-input" name="payment" id="paypal">
+                            <label class="custom-control-label" for="paypal">Paypal</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" class="custom-control-input" name="payment" id="directcheck">
+                            <label class="custom-control-label" for="directcheck">Cash On Pickup</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" class="custom-control-input" name="payment" id="creditcard">
+                            <label class="custom-control-label" for="creditcard">Credit Card (Visa / RuPay)</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" class="custom-control-input" name="payment" id="debitcard">
+                            <label class="custom-control-label" for="debitcard">Debit Card</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" class="custom-control-input" name="payment" id="upi">
+                            <label class="custom-control-label" for="upi">UPI Payment</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" class="custom-control-input" name="payment" id="netbanking">
+                            <label class="custom-control-label" for="netbanking">Net Banking</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- E-Cycle Booking End -->
+
+<!-- Vendor Start -->
+<div class="container-fluid py-5">
+    <div class="container py-5">
+        <div class="owl-carousel vendor-carousel">
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-1.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-2.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-3.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-4.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-5.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-6.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-7.png' %}" alt="">
+            </div>
+            <div class="bg-light p-4">
+                <img src="{% static 'userapp/img/vendor-8.png' %}" alt="">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Vendor End --> 
+
+<!--total hours calculation script -->
+<script>
+function calculateTotalHours() {
+    const startInput = document.querySelector('input[name="start_time"]').value;
+    const endInput = document.querySelector('input[name="end_time"]').value;
+    const totalHoursInput = document.querySelector('input[name="total_hours"]');
+
+    if (!startInput || !endInput) return;
+
+    // Parse time (format: hh:mm AM/PM)
+    function parseTime(timeStr) {
+        const [time, modifier] = timeStr.trim().split(' ');
+        let [hours, minutes] = time.split(':').map(Number);
+        if (modifier === 'PM' && hours !== 12) hours += 12;
+        if (modifier === 'AM' && hours === 12) hours = 0;
+        return hours * 60 + minutes;
+    }
+
+    let startMinutes = parseTime(startInput);
+    let endMinutes = parseTime(endInput);
+
+    // Agar end time choti ho start se, matlab agle din ki hai
+    if (endMinutes < startMinutes) {
+        endMinutes += 24 * 60;
+    }
+
+    const diffMinutes = endMinutes - startMinutes;
+    const totalHours = Math.ceil(diffMinutes / 60);
+
+    totalHoursInput.value = totalHours;
+    // Display update
+    const h = Math.floor(diffMinutes / 60);
+    const m = diffMinutes % 60;
+    let label = '';
+    if (h > 0 && m > 0) label = `${h} hr ${m} min`;
+    else if (h > 0) label = `${h} ${h === 1 ? 'Hour' : 'Hours'}`;
+    else label = `${m} Minutes`;
+
+    document.getElementById('hours-text').textContent = label;
+    document.querySelector('#hours-display p:last-child').textContent = '';
+}
+
+// Datetimepicker event listeners
+document.addEventListener('DOMContentLoaded', function () {
+    const startEl = document.getElementById('time2');
+    const endEl = document.getElementById('time3');
+
+    if (startEl) {
+        $(startEl).on('change.datetimepicker', calculateTotalHours);
+    }
+    if (endEl) {
+        $(endEl).on('change.datetimepicker', calculateTotalHours);
+    }
+});
+</script>
+
+{% endblock %}

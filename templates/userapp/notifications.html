@@ -1,0 +1,72 @@
+{% extends 'userapp/master.html' %}
+{% load static %}
+{% block content %}
+
+<section class="page-banner">
+  <div class="container">
+    <h1>My Notifications</h1>
+    <div class="breadcrumb-nav"><a href="{% url 'index' %}">Home</a> / <span>Notifications</span></div>
+  </div>
+</section>
+
+<section class="section-pad">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="cart-items-card p-0">
+
+          <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
+            <h6 class="mb-0 fw-bold">🔔 All Notifications
+              {% if notifications %}<span class="badge bg-primary ms-2">{{ notifications.count }}</span>{% endif %}
+            </h6>
+            {% if notifications %}
+            <form method="post" action="{% url 'clear_notifications' %}"
+                  onsubmit="return confirm('Clear all notifications? This cannot be undone.')">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-sm btn-outline-danger">
+                <i class="bi bi-trash me-1"></i>Clear All
+              </button>
+            </form>
+            {% endif %}
+          </div>
+
+          {% for note in notifications %}
+          <div class="d-flex align-items-start gap-3 p-3 border-bottom {% if not note.is_read %}bg-light{% endif %}">
+            <div class="flex-shrink-0" style="font-size:1.5rem;margin-top:2px;">
+              {% if 'Placed' in note.title or '✅' in note.title and 'Placed' in note.title %}🛒
+              {% elif 'Payment Received' in note.title or '💳' in note.title %}💳
+              {% elif 'Processing' in note.title or '📦' in note.title and 'Process' in note.title %}📦
+              {% elif 'Assigned' in note.title or '🚚' in note.title %}🚚
+              {% elif 'Out for Delivery' in note.title or '🛵' in note.title %}🛵
+              {% elif 'Delivered' in note.title or '🎉' in note.title %}🎉
+              {% elif 'Cancel' in note.title or '❌' in note.title %}❌
+              {% elif 'Refund' in note.title or '💰' in note.title %}💰
+              {% elif 'Welcome' in note.title or '👋' in note.title %}👋
+              {% elif 'Profile' in note.title or '👤' in note.title %}👤
+              {% else %}🔔{% endif %}
+            </div>
+            <div class="flex-grow-1">
+              <div class="d-flex justify-content-between align-items-start">
+                <h6 class="mb-1 {% if not note.is_read %}fw-bold{% endif %}">{{ note.title }}</h6>
+                {% if not note.is_read %}<span class="badge bg-primary" style="font-size:.62rem;flex-shrink:0;margin-left:8px">New</span>{% endif %}
+              </div>
+              <p class="mb-1 text-muted small">{{ note.message }}</p>
+              <small class="text-muted"><i class="bi bi-clock me-1"></i>{{ note.created_at|date:"d M Y, h:i A" }}</small>
+            </div>
+          </div>
+          {% empty %}
+          <div class="text-center py-5 px-4">
+            <i class="bi bi-bell-slash fs-1 text-muted"></i>
+            <p class="mt-3 mb-1 fw-semibold">No notifications</p>
+            <p class="text-muted small">You'll see order updates, payment alerts and delivery info here.</p>
+            <a href="{% url 'shop_page' %}" class="btn-primary-custom mt-3">Start Shopping</a>
+          </div>
+          {% endfor %}
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

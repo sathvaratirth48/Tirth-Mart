@@ -1,0 +1,110 @@
+{% extends 'userapp/master.html' %}
+{% load static %}
+{% block content %}
+
+<section class="page-banner">
+  <div class="container">
+    <h1>My Wishlist</h1>
+    <div class="breadcrumb-nav"><a href="{% url 'index' %}">Home</a> / <span>Wishlist</span></div>
+  </div>
+</section>
+
+<section class="section-pad">
+  <div class="container">
+    <div class="row g-3" id="wishlist-grid">
+      {% for item in items %}
+      <div class="col-md-4" data-wishlist-item="{{ item.id }}" data-product-id="{{ item.product.id }}">
+        <div class="product-card">
+          <div class="product-thumb">
+            {% if item.product.image %}
+            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="img-fluid">
+            {% endif %}
+            <div class="product-actions">
+              <button class="remove-wishlist-btn active" title="Remove from Wishlist">
+                <i class="bi bi-heart-fill"></i>
+              </button>
+            </div>
+          </div>
+          <div class="product-info">
+            <span class="cat">{{ item.product.category.name }}</span>
+            <h5>{{ item.product.name }}</h5>
+            <p class="price">₹{{ item.product.price }}</p>
+            <div class="d-flex gap-2">
+              <a href="{% url 'product_detail' item.product.pk %}" class="btn btn-peacock flex-fill">View</a>
+              <button class="btn btn-outline-custom add-to-cart-from-wishlist" data-product-id="{{ item.product.id }}">
+                <i class="bi bi-bag-plus"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12">
+        <div class="cart-items-card p-5 text-center">
+          <i class="bi bi-heart fs-1 text-muted"></i>
+          <p class="mt-3 mb-1">Your wishlist is empty.</p>
+          <a href="{% url 'shop_page' %}" class="btn-primary-custom mt-2">Continue Shopping</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<script>
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+const csrftoken = getCookie('csrftoken');
+
+document.querySelectorAll('.remove-wishlist-btn').forEach(btn => {
+    btn.addEventListener('click', function () {
+        const wrapper = this.closest('[data-product-id]');
+        const productId = wrapper.dataset.productId;
+        fetch("/api/wishlist/toggle/", {
+            method: 'POST',
+            headers: { 'X-CSRFToken': csrftoken, 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `product_id=${productId}`
+        })
+        .then(res => res.json())
+        .then(data => {
+            const badge = document.querySelector('[data-wish-badge]');
+            if (badge) badge.textContent = data.wishlist_count;
+            wrapper.remove();
+            if (!document.querySelector('#wishlist-grid [data-product-id]')) {
+                location.reload();
+            }
+        });
+    });
+});
+
+document.querySelectorAll('.add-to-cart-from-wishlist').forEach(btn => {
+    btn.addEventListener('click', function () {
+        const productId = this.dataset.productId;
+        fetch("/api/cart/add/", {
+            method: 'POST',
+            headers: { 'X-CSRFToken': csrftoken, 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `product_id=${productId}`
+        })
+        .then(res => res.json())
+        .then(data => {
+            const badge = document.querySelector('[data-cart-badge]');
+            if (badge && data.cart_count !== undefined) badge.textContent = data.cart_count;
+            this.innerHTML = '<i class="bi bi-check2"></i>';
+        });
+    });
+});
+</script>
+
+{% endblock %}

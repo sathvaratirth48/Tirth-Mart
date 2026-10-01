@@ -1,0 +1,18 @@
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+exclude = ["*/migrations/*"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "C4", "SIM"]
+ignore = [
+    "RUF012",  # Django Meta classes / choices legitimately use mutable class attrs
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["app_modules", "ecommerce_project"]
+
+[tool.black]
+line-length = 120
+target-version = ["py312"]
+extend-exclude = "migrations"

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  {% load static %}
+
+<head>
+  <title>Admin Register | Tirth Mart</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+  .form-control:focus {
+    color: var(--bs-body-color);
+    background-color: var(--bs-body-bg);
+    border-color: blue;
+    outline: 2;
+    box-shadow: none;
+  }
+</style>
+
+</head>
+
+<body class="bg-light">
+
+  <div class="container mt-5">
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+        <div class="auth-creative-inner">
+            <div class="creative-card-wrapper">
+                <div class="card my-4 overflow-hidden" style="z-index: 1">
+                    <div class="row flex-1 g-0">
+                        <div class="col-lg-6 h-100 my-auto">
+
+                            <div class="creative-card-body card-body p-sm-5">
+                                <h2 class="fs-20 fw-bolder mb-1">Admin Registration</h2>
+                                <p class="text-muted mb-4">Create an administrator account for the Tirth Mart dashboard.</p>
+                                <form method="POST">
+                                {% csrf_token %}
+
+                                <!-- Username -->
+                                <div class="mb-3">
+                                  <label>Username</label>
+                                  <input type="text" name="username" class="form-control" required>
+                                </div>
+
+                                <!-- Email -->
+                                <div class="mb-3">
+                                  <label>Email</label>
+                                  <input type="email" name="email" class="form-control" required>
+                                </div>
+
+                                <!-- Phone -->
+                                <div class="mb-3">
+                                  <label>Phone Number</label>
+                                  <input type="text" name="phone_number" class="form-control"
+                                        maxlength="10"
+                                        pattern="\d{10}"
+                                        title="10 digit phone number"
+                                        placeholder="Enter Your Phone Number">
+                                </div>
+
+                                <!-- Password -->
+                                <div class="mb-3">
+                                  <label>Password</label>
+                                  <input type="password" name="password" class="form-control" required>
+                                </div>
+
+                                <!-- Confirm Password -->
+                                <div class="mb-3">
+                                  <label>Confirm Password</label>
+                                  <input type="password" name="password1" class="form-control" required>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary w-100">Register as Admin</button>
+                              </form>
+                                <div class="mt-5 text-muted">
+                                    <span>Already have an account?</span>
+                                    <a href="{% url 'admin_login' %}" class="fw-bold">Login</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 order-0 order-lg-1 border "
+                                            style="background-image: url('{% static "userapp/images/hero-2.png" %}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

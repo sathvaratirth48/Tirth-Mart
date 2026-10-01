@@ -1,0 +1,53 @@
+{% extends 'userapp/master.html' %}
+{% load static %}
+{% block content %}
+
+<section class="page-banner">
+  <div class="container">
+    <h1>Edit Profile</h1>
+    <div class="breadcrumb-nav"><a href="{% url 'index' %}">Home</a> / <a href="{% url 'profile_view' %}">Profile</a> / <span>Edit</span></div>
+  </div>
+</section>
+
+<section class="section-pad">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-7">
+        <div class="cart-items-card p-4">
+          {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+          <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="text-center mb-4">
+              {% if user.profile_image %}
+                <img src="{{ user.profile_image.url }}" class="rounded-circle" style="width:90px;height:90px;object-fit:cover;">
+                <div class="mt-2">
+                  <a href="{% url 'delete_profile_image' %}" class="text-danger small">Remove photo</a>
+                </div>
+              {% endif %}
+            </div>
+            {% for field in form %}
+            <div class="mb-3">
+              <label class="form-label">{{ field.label }}</label>
+              {{ field }}
+              {% if field.errors %}<div class="text-danger small">{{ field.errors }}</div>{% endif %}
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn-primary-custom w-100 justify-content-center">
+              <i class="bi bi-check-circle me-2"></i>Save Changes
+            </button>
+          </form>
+          <hr>
+          <a href="{% url 'change_password' %}" class="btn-outline-custom w-100 justify-content-center">
+            <i class="bi bi-key me-2"></i>Change Password
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'deliveryapp/base.html' %}
+{% block title %}Pending Verification - Tirth Mart{% endblock %}
+{% block content %}
+
+<div class="row justify-content-center">
+  <div class="col-lg-6 text-center">
+    <div class="card p-5">
+      <i class="bi bi-hourglass-split text-warning" style="font-size:3.5rem;"></i>
+      <h3 class="mt-3">Account Pending Verification</h3>
+      <p class="text-muted">
+        Thanks for registering as a delivery partner! Your account is currently under review.
+        An admin will verify your details shortly. You'll be able to log in and start
+        receiving delivery assignments once approved.
+      </p>
+      <a href="{% url 'user_logout' %}" class="btn btn-outline-dark mt-3">Logout</a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

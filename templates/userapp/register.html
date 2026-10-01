@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+  {% load static %}
+
+<head>
+  <title>Register | Role-Based Login</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+  .form-control:focus {
+    color: var(--bs-body-color);
+    background-color: var(--bs-body-bg);
+    border-color: blue;
+    outline: 2;
+    box-shadow: none;
+  }
+</style>
+
+</head>
+
+<body class="bg-light">
+
+  <div class="container mt-5">
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+        <div class="auth-creative-inner">
+            <div class="creative-card-wrapper">
+                <div class="card my-4 overflow-hidden" style="z-index: 1">
+                    <div class="row flex-1 g-0">
+                        <div class="col-lg-6 h-100 my-auto">
+
+                            <div class="creative-card-body card-body p-sm-5">
+                                <h2 class="fs-20 fw-bolder mb-4">Register</h2>
+                                <form method="POST" enctype="multipart/form-data" id="registerForm">
+                                {% csrf_token %}
+
+                                <!-- Username -->
+                                <div class="mb-3">
+                                  <label>Username</label>
+                                  <input type="text" name="username" class="form-control" required>
+                                </div>
+
+                                <!-- Email -->
+                                <div class="mb-3">
+                                  <label>Email</label>
+                                  <input type="email" name="email" class="form-control" required>
+                                </div>
+
+                                <!-- Role -->
+                                <div class="mb-3">
+                                  <label>Role</label>
+                                  <select name="role" id="roleSelect" class="form-select" required onchange="toggleRoleFields()">
+                                    <option value="">Select Role</option>
+                                    <option value="User">User</option>
+                                    <option value="Delivery">Delivery Boy</option>
+                                  </select>
+                                </div>
+
+                                <!-- Phone -->
+                                <div class="mb-3">
+                                  <label>Phone Number</label>
+                                  <input type="text" name="phone_number" class="form-control"
+                                        maxlength="10"
+                                        pattern="\d{10}"
+                                        title="10 digit phone number"
+                                        placeholder="Enter Your Phone Number"
+                                        required>
+                                </div>
+
+                                <!-- Address -->
+                                <div class="mb-3">
+                                  <label>Address</label>
+                                  <textarea name="address" class="form-control" required></textarea>
+                                </div>
+
+                                <!-- DOB -->
+                                <div class="mb-3">
+                                  <label>Date of Birth</label>
+                                  <input type="date" name="date_of_birth" id="dobInput" class="form-control"
+                                         min="1950-01-01" max="2019-12-31" required>
+                                  <small class="text-muted">You cannot select a year between 2020 and 2026.</small>
+                                </div>
+
+                                <!-- Password -->
+                                <div class="mb-3">
+                                  <label>Password</label>
+                                  <input type="password" name="password" class="form-control" required>
+                                </div>
+
+                                <!-- Confirm Password -->
+                                <div class="mb-3">
+                                  <label>Confirm Password</label>
+                                  <input type="password" name="confirm_password" class="form-control" required>
+                                </div>
+
+                                <!-- ===================== Delivery Boy Only Fields ===================== -->
+                                <div id="deliveryOnlyFields" style="display:none;">
+
+                                  <!-- Vehicle Details -->
+                                  <div class="row g-3 mb-3">
+                                    <div class="col-md-6">
+                                      <label>Vehicle Type</label>
+                                      <select name="vehicle_type" class="form-select">
+                                        <option value="bike">Bike</option>
+                                        <option value="bicycle">Bicycle</option>
+                                        <option value="scooter">Scooter</option>
+                                      </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                      <label>Vehicle Number</label>
+                                      <input type="text" name="vehicle_number" class="form-control" placeholder="e.g. GJ01AB1234">
+                                    </div>
+                                  </div>
+
+                                  <!-- ✅ KYC Section -->
+                                  <div class="card mb-4 border-warning">
+                                    <div class="card-header bg-warning text-dark">
+                                      <h5 class="mb-0">🪪 KYC Verification Documents</h5>
+                                    </div>
+                                    <div class="card-body row g-3">
+
+                                      <!-- Aadhaar — REQUIRED for Delivery Boy -->
+                                      <div class="col-md-6">
+                                        <label class="form-label">Aadhaar Number <span class="text-danger">*</span></label>
+                                        <input type="text" name="aadhaar_number" id="aadhaarNumber" class="form-control"
+                                              placeholder="XXXX XXXX XXXX" maxlength="12"
+                                              pattern="\d{12}"
+                                              title="12 digit Aadhaar number">
+                                      </div>
+                                      <div class="col-md-6">
+                                        <label class="form-label">Aadhaar Card Image <span class="text-danger">*</span></label>
+                                        <input type="file" name="aadhaar_image" id="aadhaarImage" class="form-control"
+                                              accept="image/*">
+                                      </div>
+
+                                      <!-- PAN — OPTIONAL -->
+                                      <div class="col-md-6">
+                                        <label class="form-label">PAN Number</label>
+                                        <input type="text" name="pan_number" class="form-control"
+                                              placeholder="ABCDE1234F" maxlength="10"
+                                              style="text-transform:uppercase"
+                                              pattern="[A-Z]{5}[0-9]{4}[A-Z]"
+                                              title="Format: ABCDE1234F"
+                                              id="panNumber">
+                                      </div>
+                                      <div class="col-md-6">
+                                        <label class="form-label">PAN Card Image</label>
+                                        <input type="file" name="pan_image" class="form-control"
+                                              accept="image/*" id="panImage">
+                                      </div>
+
+                                      <!-- Other Document — OPTIONAL -->
+                                      <div class="col-12">
+                                        <label class="form-label">
+                                          Other Document
+                                          (Driving License / Voter ID)
+                                        </label>
+                                        <input type="file" name="other_document_image" class="form-control" accept="image/*">
+                                      </div>
+
+                                    </div>
+                                  </div>
+                                  <!-- KYC Section End -->
+
+                                </div>
+                                <!-- ===================== End Delivery Boy Only Fields ===================== -->
+
+                                    <div class="my-4">
+                                        <div class="custom-control custom-checkbox mb-2">
+                                            <input type="checkbox" class="custom-control-input" id="receiveMial" required>
+                                            <label class="custom-control-label c-pointer text-muted" for="receiveMial" style="font-weight: 400 !important">Yes, I wnat to receive TIRTH community emails</label>
+                                        </div>
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="termsCondition" required>
+                                            <label class="custom-control-label c-pointer text-muted" for="termsCondition" style="font-weight: 400 !important">I agree to all the <a href="">Terms &amp; Conditions</a> and <a href="">Fees</a>.</label>
+                                        </div>
+                                    </div>
+
+                                <button type="submit" class="btn btn-primary w-100">Register</button>
+                              </form>
+                                <div class="mt-5 text-muted">
+                                    <span>Already have an account?</span>
+                                    <a href="{% url 'user_login' %}" class="fw-bold">Login</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 order-0 order-lg-1 border "
+                                            style="background-image: url('{% static "userapp/images/hero-2.png" %}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+<!-- PAN cross-validation script -->
+<script>
+  // Agar PAN number bhara toh image required, aur vice versa
+  const panNumber = document.getElementById('panNumber');
+  const panImage = document.getElementById('panImage');
+
+  panNumber.addEventListener('input', function () {
+    panImage.required = this.value.trim() !== '';
+  });
+
+  panImage.addEventListener('change', function () {
+    panNumber.required = this.files.length > 0;
+  });
+
+  // Show/Hide Delivery Boy only fields (Vehicle + KYC) based on selected Role
+  function toggleRoleFields() {
+    const role = document.getElementById('roleSelect').value;
+    const deliveryFields = document.getElementById('deliveryOnlyFields');
+    const aadhaarNumber = document.getElementById('aadhaarNumber');
+    const aadhaarImage = document.getElementById('aadhaarImage');
+
+    if (role === 'Delivery') {
+      deliveryFields.style.display = 'block';
+      aadhaarNumber.required = true;
+      aadhaarImage.required = true;
+    } else {
+      deliveryFields.style.display = 'none';
+      aadhaarNumber.required = false;
+      aadhaarImage.required = false;
+    }
+  }
+
+  // Date of Birth: block selecting years 2020-2026 (extra safety on top of min/max attrs)
+  document.getElementById('dobInput').addEventListener('change', function () {
+    const year = parseInt(this.value.split('-')[0], 10);
+    if (year >= 2020 && year <= 2026) {
+      alert('You cannot select a Date of Birth between the years 2020 and 2026.');
+      this.value = '';
+    }
+  });
+</script>
+
+</html>

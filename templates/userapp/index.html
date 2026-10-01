@@ -1,0 +1,348 @@
+{% extends 'userapp/master.html' %}
+{% load static %}
+{% block content %}
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-slide active" style="background-image:url('{% static "userapp/images/hero-1.png" %}')">
+    <div class="container">
+      <div class="hero-content">
+        <span class="tag">Fresh &amp; Crunchy</span>
+        <h1>Premium Snacks Delivered to Your Doorstep</h1>
+        <p>Discover a world of crispy namkeen, mouth-watering sweets and your favourite chocolates - all in one premium
+          store.</p>
+        <div class="d-flex gap-3 flex-wrap">
+          <a href="{% url 'shop_page' %}" class="btn btn-accent"><i class="bi bi-bag"></i> Shop Now</a>
+          <a href="{% url 'shop_page' %}?category=Combo Packs" class="btn btn-light">View Offers</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-slide" style="background-image:url('{% static "userapp/images/hero-2.png" %}')">
+    <div class="container">
+      <div class="hero-content">
+        <span class="tag">Festival Special</span>
+        <h1>Authentic Sweets for Every Celebration</h1>
+        <p>From melt-in-mouth Kaju Katli to syrupy Gulab Jamun - handcrafted mithai made fresh, just for you.</p>
+        <div class="d-flex gap-3 flex-wrap">
+          <a href="{% url 'shop_page' %}?category=Sweets" class="btn btn-accent"><i class="bi bi-gift"></i> Explore Sweets</a>
+          <a href="{% url 'shop_page' %}" class="btn btn-light">Shop All</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-slide" style="background-image:url('{% static "userapp/images/hero-3.png" %}')">
+    <div class="container">
+      <div class="hero-content">
+        <span class="tag">Up to 30% Off</span>
+        <h1>Chocolates, Biscuits &amp; Cold Drinks</h1>
+        <p>Stock up on all your favourites with unbeatable prices and lightning-fast delivery.</p>
+        <div class="d-flex gap-3 flex-wrap">
+          <a href="{% url 'shop_page' %}?category=Chocolates" class="btn btn-accent"><i class="bi bi-lightning-charge"></i> Grab
+            Deals</a>
+          <a href="{% url 'shop_page' %}" class="btn btn-light">Shop All</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-dots"><span class="active"></span><span></span><span></span></div>
+  <div class="hero-arrows">
+    <button class="hero-prev" aria-label="Previous slide"><i class="bi bi-chevron-left"></i></button>
+    <button class="hero-next" aria-label="Next slide"><i class="bi bi-chevron-right"></i></button>
+  </div>
+</section>
+
+<!-- ===== FEATURE STRIP ===== -->
+<section class="feature-strip">
+  <div class="container">
+    <div class="row">
+      <div class="col-6 col-lg-3">
+        <div class="feature-item">
+          <div class="ic"><i class="bi bi-truck"></i></div>
+          <div>
+            <h4>Free Delivery</h4>
+            <p>On orders above &#8377;499</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="feature-item">
+          <div class="ic"><i class="bi bi-shield-check"></i></div>
+          <div>
+            <h4>Secure Payment</h4>
+            <p>100% protected checkout</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="feature-item">
+          <div class="ic"><i class="bi bi-arrow-repeat"></i></div>
+          <div>
+            <h4>Easy Returns</h4>
+            <p>7-day return policy</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="feature-item">
+          <div class="ic"><i class="bi bi-headset"></i></div>
+          <div>
+            <h4>24/7 Support</h4>
+            <p>Dedicated assistance</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CATEGORIES ===== -->
+<section class="section">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Browse Categories</span>
+      <h2>Shop by Category</h2>
+      <p>Everything you crave, neatly organised for a delightful shopping experience.</p>
+    </div>
+    <div class="row g-3">
+      <div class="col-6 col-md-4 col-lg-2"><a href="{% url 'shop_page' %}?category=Snacks" class="category-card reveal">
+          <div class="cat-ic"><i class="bi bi-bag-heart"></i></div>
+          <h4>Snacks</h4><span>42 items</span>
+        </a></div>
+      <div class="col-6 col-md-4 col-lg-2"><a href="{% url 'shop_page' %}?category=Sweets" class="category-card reveal">
+          <div class="cat-ic"><i class="bi bi-cake2"></i></div>
+          <h4>Sweets</h4><span>30 items</span>
+        </a></div>
+      <div class="col-6 col-md-4 col-lg-2"><a href="{% url 'shop_page' %}?category=Chocolates" class="category-card reveal">
+          <div class="cat-ic"><i class="bi bi-gift"></i></div>
+          <h4>Chocolates</h4><span>25 items</span>
+        </a></div>
+      <div class="col-6 col-md-4 col-lg-2"><a href="{% url 'shop_page' %}?category=Biscuits" class="category-card reveal">
+          <div class="cat-ic"><i class="bi bi-cookie"></i></div>
+          <h4>Biscuits</h4><span>28 items</span>
+        </a></div>
+      <div class="col-6 col-md-4 col-lg-2"><a href="{% url 'shop_page' %}?category=Namkeen" class="category-card reveal">
+          <div class="cat-ic"><i class="bi bi-basket2"></i></div>
+          <h4>Namkeen</h4><span>35 items</span>
+        </a></div>
+      <div class="col-6 col-md-4 col-lg-2"><a href="{% url 'shop_page' %}?category=Bhel" class="category-card reveal">
+          <div class="cat-ic"><i class="bi bi-cup-straw"></i></div>
+          <h4>Bhel</h4><span>12 items</span>
+        </a></div>
+      <div class="col-6 col-md-4 col-lg-2"><a href="{% url 'shop_page' %}?category=Instant+Food" class="category-card reveal">
+          <div class="cat-ic"><i class="bi bi-egg-fried"></i></div>
+          <h4>Instant Food</h4><span>Samosa &amp; more</span>
+        </a></div>
+      <div class="col-6 col-md-4 col-lg-2"><a href="{% url 'shop_page' %}?category=Cold+Drinks" class="category-card reveal">
+          <div class="cat-ic"><i class="bi bi-cup-straw"></i></div>
+          <h4>Cold Drinks</h4><span>Refreshing</span>
+        </a></div>
+      <div class="col-6 col-md-4 col-lg-2"><a href="{% url 'shop_page' %}?category=Ice+Cream" class="category-card reveal">
+          <div class="cat-ic"><i class="bi bi-snow2"></i></div>
+          <h4>Ice Cream</h4><span>Cool treats</span>
+        </a></div>
+      <div class="col-6 col-md-4 col-lg-2"><a href="{% url 'shop_page' %}?category=Dry+Fruits" class="category-card reveal">
+          <div class="cat-ic"><i class="bi bi-tree"></i></div>
+          <h4>Dry Fruits</h4><span>Healthy picks</span>
+        </a></div>
+      <div class="col-6 col-md-4 col-lg-2"><a href="{% url 'shop_page' %}?category=Combo+Packs" class="category-card reveal">
+          <div class="cat-ic"><i class="bi bi-boxes"></i></div>
+          <h4>Combo Packs</h4><span>Best value</span>
+        </a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PROMO BANNERS ===== -->
+<section class="section-sm">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-md-6">
+        <div class="promo-banner bg-a reveal">
+          <span class="small">Combo Packs</span>
+          <h3>Festive Hampers Up to 25% Off</h3>
+          <a href="{% url 'shop_page' %}?category=Combo Packs" class="btn btn-light">Shop Combos</a>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="promo-banner bg-b reveal">
+          <span class="small">New Arrivals</span>
+          <h3>Fresh Sweets Made Daily</h3>
+          <a href="{% url 'shop_page' %}?category=Sweets" class="btn btn-peacock">Order Now</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FEATURED PRODUCTS ===== -->
+<section class="section">
+  <div class="container">
+    <div class="section-head-row reveal">
+      <div>
+        <span class="eyebrow">Handpicked</span>
+        <h2>Featured Products</h2>
+      </div>
+      <a href="{% url 'shop_page' %}" class="btn btn-outline-peacock">View All <i class="bi bi-arrow-right"></i></a>
+    </div>
+    <div class="row g-3" id="featuredGrid">
+      {% for product in featured_products %}
+      <div class="col-md-3 col-6">
+        {% include 'userapp/includes/product_card.html' %}
+      </div>
+      {% empty %}
+      <div class="col-12 text-center text-muted py-4">No products available yet.</div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ===== SPECIAL SECTIONS (TABS) ===== -->
+<section class="section bg-soft">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Just for You</span>
+      <h2>Trending This Week</h2>
+      <p>Best sellers, new arrivals and most-loved treats curated by our team.</p>
+    </div>
+    <div class="tab-nav">
+      <button class="active" data-tab="best">Best Sellers</button>
+      <button data-tab="new">New Arrivals</button>
+      <button data-tab="popular">Popular Products</button>
+    </div>
+    <div class="tab-panel active" data-panel="best">
+      <div class="row g-3" id="tab-best">
+        {% for product in best_sellers %}
+        <div class="col-md-3 col-6">
+          {% include 'userapp/includes/product_card.html' %}
+        </div>
+        {% empty %}
+        <div class="col-12 text-center text-muted py-4">No products available yet.</div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="tab-panel" data-panel="new">
+      <div class="row g-3" id="tab-new">
+        {% for product in new_arrivals %}
+        <div class="col-md-3 col-6">
+          {% include 'userapp/includes/product_card.html' %}
+        </div>
+        {% empty %}
+        <div class="col-12 text-center text-muted py-4">No products available yet.</div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="tab-panel" data-panel="popular">
+      <div class="row g-3" id="tab-popular">
+        {% for product in popular_products %}
+        <div class="col-md-3 col-6">
+          {% include 'userapp/includes/product_card.html' %}
+        </div>
+        {% empty %}
+        <div class="col-12 text-center text-muted py-4">No products available yet.</div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TESTIMONIALS ===== -->
+<section class="section testimonials">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Reviews</span>
+      <h2>What Our Customers Say</h2>
+      <p>Thousands of happy snackers trust Tirth Mart for their daily cravings.</p>
+    </div>
+    <div class="testi-viewport">
+      <div class="testi-track">
+        <div class="testi-card">
+          <div class="testi-inner">
+            <div class="quote-ic"><i class="bi bi-quote"></i></div>
+            <p>"Freshest snacks I've ordered online! The sweets tasted just like my grandmother's homemade mithai.
+              Delivery was super fast too."</p>
+            <div class="testi-author">
+              <div class="av">RP</div>
+              <div>
+                <h5>Riya Patel</h5><span>Verified Buyer</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-inner">
+            <div class="quote-ic"><i class="bi bi-quote"></i></div>
+            <p>"The festival combo hamper was beautifully packed and full of variety. Perfect for gifting. Will
+              definitely order again!"</p>
+            <div class="testi-author">
+              <div class="av">AK</div>
+              <div>
+                <h5>Arjun Kumar</h5><span>Verified Buyer</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-inner">
+            <div class="quote-ic"><i class="bi bi-quote"></i></div>
+            <p>"Great prices and the quality is consistently excellent. Customer support helped me track my order within
+              minutes. Highly recommend."</p>
+            <div class="testi-author">
+              <div class="av">SM</div>
+              <div>
+                <h5>Sneha Mehta</h5><span>Verified Buyer</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-dots"><span class="active"></span><span></span><span></span></div>
+  </div>
+</section>
+
+<!-- ===== BRANDS ===== -->
+<section class="section">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Trusted Brands</span>
+      <h2>Shop Your Favourite Brands</h2>
+    </div>
+    <div class="row g-3">
+      <div class="col-6 col-md-4 col-lg-2">
+        <div class="brand-logo reveal">Kurkure</div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <div class="brand-logo reveal">Lay's</div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <div class="brand-logo reveal">Cadbury</div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <div class="brand-logo reveal">Nestlé</div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <div class="brand-logo reveal">Parle</div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <div class="brand-logo reveal">Balaji</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== NEWSLETTER ===== -->
+<section class="section-sm">
+  <div class="container">
+    <div class="newsletter reveal">
+      <h2>Get 10% Off Your First Order</h2>
+      <p>Subscribe to our newsletter for exclusive deals, new arrivals and festive offers.</p>
+      <form class="newsletter-form">
+        <input type="email" placeholder="Enter your email address" required aria-label="Email address">
+        <button type="submit" class="btn btn-accent"><i class="bi bi-send"></i> Subscribe</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

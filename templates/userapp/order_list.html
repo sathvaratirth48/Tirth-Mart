@@ -1,0 +1,82 @@
+{% extends 'userapp/master.html' %}
+{% load static %}
+{% block content %}
+
+<section class="page-banner">
+  <div class="container">
+    <h1>My Orders</h1>
+    <div class="breadcrumb-nav"><a href="{% url 'index' %}">Home</a> / <span>My Orders</span></div>
+  </div>
+</section>
+
+<section class="section-pad">
+  <div class="container">
+
+    {% for order in orders %}
+    <div class="cart-items-card p-4 mb-3">
+      <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3 pb-3 border-bottom">
+        <div>
+          <span class="text-muted small d-block">ORDER PLACED</span>
+          <span>{{ order.created_at|date:"d M Y" }}</span>
+        </div>
+        <div>
+          <span class="text-muted small d-block">TOTAL</span>
+          <span>₹{{ order.total_amount }}</span>
+        </div>
+        <div>
+          <span class="text-muted small d-block">ORDER #</span>
+          <span>{{ order.short_display_id }}</span>
+        </div>
+        <div class="text-end">
+          <span class="badge px-3 py-2"
+                style="background:{% if order.status == 'cancelled' or order.status == 'payment_failed' %}#dc3545{% elif order.status == 'delivered' %}#198754{% else %}#0d6efd{% endif %};">
+            {{ order.get_status_display }}
+          </span>
+        </div>
+      </div>
+
+      <div class="row align-items-center">
+        <div class="col-md-8">
+          <div class="d-flex flex-wrap gap-3">
+            {% for item in order.items.all|slice:":4" %}
+            <div class="d-flex align-items-center gap-2">
+              {% if item.product.image %}
+              <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" style="width:48px;height:48px;object-fit:cover;border-radius:8px;">
+              {% endif %}
+              <span class="small">{{ item.product.name }} <span class="text-muted">x{{ item.quantity }}</span></span>
+            </div>
+            {% endfor %}
+            {% if order.items.count > 4 %}
+            <span class="small text-muted">+{{ order.items.count|add:"-4" }} more</span>
+            {% endif %}
+          </div>
+        </div>
+        <div class="col-md-4 text-md-end mt-3 mt-md-0">
+          <a href="{% url 'order_detail' order.id %}" class="btn-outline-custom me-2">Track / View</a>
+          {% if order.is_cancellable %}
+          <form method="post" action="{% url 'cancel_order' order.id %}" class="d-inline" onsubmit="return confirm('Cancel this order?');">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-danger">Cancel Order</button>
+          </form>
+          {% elif order.status == 'delivered' %}
+          {% with first_item=order.items.first %}
+          {% if first_item %}
+          <a href="{% url 'product_detail' first_item.product.id %}#revs" class="btn btn-outline-custom">Rate &amp; Review</a>
+          {% endif %}
+          {% endwith %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="cart-items-card p-5 text-center">
+      <i class="bi bi-bag-x fs-1 text-muted"></i>
+      <p class="mt-3 mb-1">You haven't placed any orders yet.</p>
+      <a href="{% url 'shop_page' %}" class="btn-primary-custom mt-2">Start Shopping</a>
+    </div>
+    {% endfor %}
+
+  </div>
+</section>
+
+{% endblock %}

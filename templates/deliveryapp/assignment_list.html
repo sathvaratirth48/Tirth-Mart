@@ -1,0 +1,55 @@
+{% extends 'deliveryapp/base.html' %}
+{% block title %}My Assignments - Tirth Mart Delivery{% endblock %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h3 class="mb-0"><i class="bi bi-clock-history me-2"></i>Delivery History &amp; Assignments</h3>
+  <a href="{% url 'delivery_dashboard' %}" class="btn btn-outline-dark"><i class="bi bi-arrow-left me-1"></i>Dashboard</a>
+</div>
+
+<div class="card p-4">
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>Customer</th>
+          <th>Assigned On</th>
+          <th>Status</th>
+          <th>Delivered On</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in assignments %}
+        <tr>
+          <td>{{ a.order.display_id }}</td>
+          <td>{{ a.order.customer.get_full_name_or_username }}</td>
+          <td>{{ a.assigned_at|date:"d M Y, h:i A" }}</td>
+          <td>
+            {% if a.status == "delivered" %}
+              <span class="badge bg-success">Delivered</span>
+            {% elif a.status == "out_for_delivery" %}
+              <span class="badge bg-info text-dark">Out for Delivery</span>
+            {% elif a.status == "picked_up" %}
+              <span class="badge bg-primary">Picked Up</span>
+            {% elif a.status == "failed" %}
+              <span class="badge bg-danger">Failed</span>
+            {% else %}
+              <span class="badge bg-warning text-dark">Assigned</span>
+            {% endif %}
+          </td>
+          <td>{{ a.delivered_at|date:"d M Y, h:i A"|default:"—" }}</td>
+          <td><a href="{% url 'delivery_assignment_detail' a.id %}" class="btn btn-sm btn-dark">View</a></td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="6" class="text-center text-muted py-4">No assignments yet.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

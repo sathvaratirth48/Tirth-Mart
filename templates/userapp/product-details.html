@@ -1,0 +1,229 @@
+{% extends 'userapp/master.html' %}
+{% load static %}
+{% block content %}
+
+<!-- BREADCRUMB -->
+<section class="page-banner" style="padding:40px 0">
+  <div class="container">
+    <div class="breadcrumb-nav"><a href="{% url 'index' %}">Home</a> / <a href="{% url 'shop_page' %}">Shop</a> / <span
+        id="pdBreadcrumb">Product</span></div>
+  </div>
+</section>
+
+<!-- PRODUCT -->
+<section class="section">
+  <div class="container">
+    <div class="row g-5">
+
+      <div class="col-lg-6">
+        {% if product.image %}
+        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid rounded">
+        {% endif %}
+      </div>
+
+      <div class="col-lg-6">
+
+        <span class="badge bg-primary">
+          {{ product.category.name }}
+        </span>
+
+        <h1>{{ product.name }}</h1>
+
+        <div class="stars mb-2">
+          {% for n in product.full_stars_range %}<i class="bi bi-star-fill"></i>{% endfor %}
+          {% if product.has_half_star %}<i class="bi bi-star-half"></i>{% endif %}
+          {% for n in product.empty_stars_range %}<i class="bi bi-star"></i>{% endfor %}
+          <span class="count">{{ product.avg_rating }} ({{ product.review_count }} reviews)</span>
+        </div>
+
+        <h3>₹{{ product.price }}
+          {% if product.mrp > product.price %}
+          <span class="price-old" style="font-size:1.1rem;">₹{{ product.mrp }}</span>
+          <span class="badge-pill badge-discount" style="font-size:0.8rem;">-{{ product.discount_percent }}%</span>
+          {% endif %}
+        </h3>
+
+        <p>{{ product.description }}</p>
+
+        <p>
+          <strong>Stock:</strong>
+          {{ product.stock_quantity }}
+        </p>
+
+        <div class="d-flex gap-2 flex-wrap mt-4">
+          <button class="btn btn-peacock add-btn" data-id="{{ product.id }}">
+            <i class="bi bi-bag-plus"></i> Add to Cart
+          </button>
+          <button class="btn btn-accent" id="buyNowBtn" data-id="{{ product.id }}">
+            <i class="bi bi-lightning-charge-fill"></i> Buy Now
+          </button>
+          <button class="wish-btn {% if in_wishlist %}active{% endif %}" data-id="{{ product.id }}" title="Add to Wishlist"
+                  style="width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:#fff;">
+            <i class="bi {% if in_wishlist %}bi-heart-fill{% else %}bi-heart{% endif %}"></i>
+          </button>
+        </div>
+
+        <a href="{% url 'shop_page' %}" class="btn btn-outline-peacock mt-3">
+          <i class="bi bi-arrow-left"></i> Back to Shop
+        </a>
+
+      </div>
+
+    </div>
+
+    <script>
+      document.getElementById('buyNowBtn').addEventListener('click', function () {
+        const productId = this.dataset.id;
+        fetch("/api/cart/add/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "X-CSRFToken": getCookie("csrftoken")
+          },
+          body: `product_id=${productId}`
+        })
+        .then(res => {
+          if (res.redirected || res.status === 302) {
+            window.location.href = "/login/";
+            return null;
+          }
+          return res.json();
+        })
+        .then(data => {
+          if (!data) return;
+          window.location.href = "{% url 'checkout' %}";
+        })
+        .catch(() => { window.location.href = "/login/"; });
+      });
+    </script>
+
+    <!-- Description tabs -->
+    <div class="row mt-5">
+      <div class="col-12">
+        <ul class="nav nav-tabs" id="pdTabs" role="tablist" style="border-bottom:2px solid var(--line)">
+          <li class="nav-item" role="presentation"><button class="nav-link active" data-bs-toggle="tab"
+              data-bs-target="#desc" type="button" style="font-family:var(--font-head)">Description</button></li>
+          <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#info"
+              type="button" style="font-family:var(--font-head)">Additional Info</button></li>
+          <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#revs"
+              type="button" style="font-family:var(--font-head)">Reviews</button></li>
+        </ul>
+        <div class="tab-content pt-4">
+          <div class="tab-pane fade show active" id="desc">
+            <p style="color:var(--muted);max-width:760px">At Tirth Mart, every product is selected with care to bring
+              you the most authentic taste and the freshest quality. Whether you are stocking up for the family,
+              planning a celebration, or simply satisfying a craving, you can trust our products to deliver on flavour
+              and value every single time. All items are hygienically packed and quality-checked before dispatch.</p>
+          </div>
+          <div class="tab-pane fade" id="info">
+            <table class="table" style="max-width:520px">
+              <tbody>
+                <tr>
+                  <th style="width:40%">Brand</th>
+                  <td>Tirth Mart</td>
+                </tr>
+                <tr>
+                  <th>Shelf Life</th>
+                  <td>6 Months</td>
+                </tr>
+                <tr>
+                  <th>Storage</th>
+                  <td>Cool &amp; dry place</td>
+                </tr>
+                <tr>
+                  <th>Country of Origin</th>
+                  <td>India</td>
+                </tr>
+                <tr>
+                  <th>Veg / Non-Veg</th>
+                  <td>Vegetarian</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="tab-pane fade" id="revs">
+            <div style="max-width:680px">
+
+              {% if request.user.is_authenticated %}
+                {% if not user_has_reviewed %}
+                <form method="post" action="{% url 'submit_review' product.pk %}" class="mb-4 pb-4" style="border-bottom:1px solid var(--line)">
+                  {% csrf_token %}
+                  <h6 class="mb-2">Write a Review</h6>
+                  <div class="mb-2">
+                    <select name="rating" class="form-select" style="max-width:180px" required>
+                      <option value="5">★★★★★ - Excellent</option>
+                      <option value="4">★★★★☆ - Good</option>
+                      <option value="3">★★★☆☆ - Average</option>
+                      <option value="2">★★☆☆☆ - Poor</option>
+                      <option value="1">★☆☆☆☆ - Terrible</option>
+                    </select>
+                  </div>
+                  <div class="mb-2">
+                    <textarea name="comment" class="form-control" rows="3" placeholder="Share your experience with this product..."></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-peacock">
+                    <i class="bi bi-send me-1"></i>Submit Review
+                  </button>
+                </form>
+                {% else %}
+                <div class="alert alert-info mb-4">
+                  <i class="bi bi-check-circle me-2"></i>You've already reviewed this product. Thanks for your feedback!
+                </div>
+                {% endif %}
+              {% else %}
+              <div class="alert alert-light border mb-4">
+                <a href="{% url 'user_login' %}">Login</a> to write a review.
+              </div>
+              {% endif %}
+
+              {% for review in reviews %}
+              <div class="mb-4 pb-3" style="border-bottom:1px solid var(--line)">
+                <div class="d-flex align-items-center gap-2 mb-1">
+                  <strong>{{ review.user.get_full_name_or_username }}</strong>
+                </div>
+                <div class="stars mb-1">
+                  {% for n in review.full_stars_range %}<i class="bi bi-star-fill"></i>{% endfor %}
+                  {% for n in review.empty_stars_range %}<i class="bi bi-star"></i>{% endfor %}
+                </div>
+                {% if review.comment %}
+                <p style="color:var(--muted);margin:0">{{ review.comment }}</p>
+                {% endif %}
+                <small class="text-muted">{{ review.created_at|date:"d M Y" }}</small>
+              </div>
+              {% empty %}
+              <p class="text-muted">No reviews yet. Be the first to review this product!</p>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RELATED -->
+<section class="section bg-soft">
+  <div class="container">
+    <div class="section-head-row">
+      <div><span class="eyebrow">You may also like</span>
+        <h2>Related Products</h2>
+      </div>
+      <a href="{% url 'shop_page' %}" class="btn btn-outline-peacock">View All <i class="bi bi-arrow-right"></i></a>
+    </div>
+    <div class="row g-3">
+
+      {% for item in related_products %}
+      <div class="col-md-3">
+        {% with product=item %}
+        {% include 'userapp/includes/product_card.html' %}
+        {% endwith %}
+      </div>
+      {% empty %}
+      <div class="col-12 text-center text-muted py-3">No related products found.</div>
+      {% endfor %}
+
+    </div>
+  </div>
+</section>
+
+{% endblock %}

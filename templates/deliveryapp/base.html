@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Delivery Dashboard - Tirth Mart{% endblock %}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <style>
+    body { background-color: #f5f7fa; }
+    .navbar-brand { font-weight: 700; }
+    .status-available { color: #198754; }
+    .status-busy { color: #fd7e14; }
+    .status-offline { color: #6c757d; }
+    .card { border: none; border-radius: .9rem; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'delivery_dashboard' %}">
+      <i class="bi bi-bicycle me-2"></i>Tirth Mart Delivery
+    </a>
+    {% if request.user.is_authenticated %}
+    <div class="d-flex align-items-center gap-3">
+      <!-- Notification Bell -->
+      <div style="position:relative;display:inline-block" id="deliveryNotifWrap">
+        <button type="button" id="deliveryNotifBtn" style="background:none;border:none;cursor:pointer;color:#fff;font-size:1.2rem;position:relative;padding:0;" aria-label="Notifications">
+          <i class="bi bi-bell"></i>
+          <span id="deliveryNotifBadge" style="display:none;position:absolute;top:-6px;right:-8px;min-width:18px;height:18px;border-radius:9px;background:#dc3545;color:#fff;font-size:.68rem;font-weight:700;align-items:center;justify-content:center;padding:0 4px;"></span>
+        </button>
+        <div id="deliveryNotifDropdown" style="position:absolute;right:0;top:calc(100% + 12px);width:300px;background:#fff;border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,.15);border:1px solid #eee;z-index:999;opacity:0;visibility:hidden;transform:translateY(-8px);transition:.18s ease;">
+          <div style="padding:12px 16px;border-bottom:1px solid #eee;font-weight:700;font-size:.9rem;">🔔 Notifications</div>
+          <div id="deliveryNotifBody" style="max-height:320px;overflow-y:auto;"></div>
+          <div style="padding:8px 16px;text-align:center;border-top:1px solid #eee;display:flex;gap:8px;justify-content:center;">
+            <a href="#" class="small text-muted">All notifications</a>
+            <form method="post" action="{% url 'delivery_notif_clear' %}" onsubmit="return confirm('Clear all notifications?');" style="display:inline;">
+              {% csrf_token %}
+              <button type="submit" style="background:none;border:none;color:#dc3545;font-size:.78rem;cursor:pointer;padding:0;">🗑 Clear All</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <span class="text-light small"><i class="bi bi-person-circle me-1"></i>{{ request.user.get_full_name_or_username }}</span>
+      <a href="{% url 'delivery_assignment_list' %}" class="btn btn-sm btn-outline-light">My Assignments</a>
+      <a href="{% url 'user_logout' %}" class="btn btn-sm btn-light">Logout</a>
+    </div>
+    {% endif %}
+  </div>
+</nav>
+
+<div class="container mt-4 mb-5">
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags|default:'info' }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  {% block content %}{% endblock %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// Delivery Notification Bell
+(function(){
+  const btn = document.getElementById('deliveryNotifBtn');
+  const drop = document.getElementById('deliveryNotifDropdown');
+  const badge = document.getElementById('deliveryNotifBadge');
+  const body = document.getElementById('deliveryNotifBody');
+  if (!btn) return;
+
+  function getCookie(name) {
+    let v=null; if(document.cookie){document.cookie.split(';').forEach(c=>{c=c.trim();if(c.startsWith(name+'=')){v=decodeURIComponent(c.slice(name.length+1));}});} return v;
+  }
+
+  function loadNotifs() {
+    fetch('/delivery/api/notifications/recent/')
+      .then(r=>r.json()).then(data=>{
+        if(data.unread>0){badge.textContent=data.unread>9?'9+':data.unread;badge.style.display='flex';}
+        else{badge.style.display='none';}
+        if(!data.notifications.length){body.innerHTML='<div style="padding:16px;text-align:center;color:#aaa;font-size:.8rem">No notifications yet.</div>';return;}
+        body.innerHTML=data.notifications.map(n=>`
+          <div data-id="${n.id}" style="padding:10px 16px;border-bottom:1px solid #f5f5f5;cursor:pointer;background:${n.is_read?'#fff':'#eff6ff'}">
+            <div style="font-size:.82rem;font-weight:700">${n.title}</div>
+            <div style="font-size:.76rem;color:#666">${n.message.length>60?n.message.slice(0,60)+'…':n.message}</div>
+            <div style="font-size:.7rem;color:#aaa;margin-top:2px">${n.time}</div>
+          </div>`).join('');
+        body.querySelectorAll('[data-id]').forEach(el=>{
+          el.addEventListener('click',()=>{
+            fetch('/delivery/api/notifications/'+el.dataset.id+'/read/',{method:'POST',headers:{'X-CSRFToken':getCookie('csrftoken')}});
+            el.style.background='#fff';
+          });
+        });
+      }).catch(()=>{});
+  }
+
+  btn.addEventListener('click',function(e){
+    e.stopPropagation();
+    const open = drop.style.opacity==='1';
+    if(open){drop.style.opacity='0';drop.style.visibility='hidden';drop.style.transform='translateY(-8px)';}
+    else{drop.style.opacity='1';drop.style.visibility='visible';drop.style.transform='translateY(0)';loadNotifs();}
+  });
+  document.addEventListener('click',function(e){
+    if(!drop.contains(e.target)&&e.target!==btn){drop.style.opacity='0';drop.style.visibility='hidden';}
+  });
+  loadNotifs();
+  setInterval(loadNotifs, 30000);
+})();
+</script>
+</html>

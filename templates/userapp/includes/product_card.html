@@ -1,0 +1,66 @@
+{% load static %}
+<div class="product-card">
+
+  <div class="product-thumb">
+    <!-- Image (with placeholder if none uploaded) — clicking goes to detail page -->
+    <a href="{% url 'product_detail' product.pk %}" class="product-thumb-link">
+      {% if product.image %}
+        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid">
+      {% else %}
+        <div class="product-thumb-placeholder">
+          <i class="bi bi-bag-heart"></i>
+          <span>{{ product.name|truncatechars:18 }}</span>
+        </div>
+      {% endif %}
+    </a>
+
+    <!-- Discount / New badge -->
+    <div class="product-badges">
+      {% if product.discount_percent > 0 %}
+        <span class="badge-pill badge-discount">-{{ product.discount_percent }}%</span>
+      {% endif %}
+      {% if product.is_new %}
+        <span class="badge-pill badge-new">New</span>
+      {% elif product.avg_rating >= 4.3 %}
+        <span class="badge-pill badge-best">Best</span>
+      {% endif %}
+    </div>
+
+    <!-- Hover overlay actions -->
+    <div class="product-actions">
+      <button class="wish-btn {% if product.id in wishlist_ids %}active{% endif %}"
+              data-id="{{ product.id }}" title="Add to Wishlist">
+        <i class="bi {% if product.id in wishlist_ids %}bi-heart-fill{% else %}bi-heart{% endif %}"></i>
+      </button>
+      <a href="{% url 'product_detail' product.pk %}" class="view-details-btn" title="View Details">
+        <i class="bi bi-eye"></i>
+      </a>
+    </div>
+  </div>
+
+  <div class="product-info">
+    <span class="cat">{{ product.category.name }}</span>
+    <h5>{{ product.name }}</h5>
+
+    <!-- Star rating -->
+    <div class="stars">
+      {% for n in product.full_stars_range %}<i class="bi bi-star-fill"></i>{% endfor %}
+      {% if product.has_half_star %}<i class="bi bi-star-half"></i>{% endif %}
+      {% for n in product.empty_stars_range %}<i class="bi bi-star"></i>{% endfor %}
+      <span class="count">({{ product.review_count }})</span>
+    </div>
+
+    <!-- Price -->
+    <div class="price-row">
+      <span class="price">₹{{ product.price }}</span>
+      {% if product.mrp > product.price %}
+        <span class="price-old">₹{{ product.mrp }}</span>
+      {% endif %}
+    </div>
+
+    <button class="btn btn-peacock add-btn" data-id="{{ product.id }}">
+      <i class="bi bi-bag-plus me-1"></i> Add to Cart
+    </button>
+  </div>
+
+</div>

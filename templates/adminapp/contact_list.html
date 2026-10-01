@@ -1,0 +1,128 @@
+{% extends 'adminapp/master.html' %}
+{% load static %}
+{% block content %}
+
+<div class="nxl-content">
+    <div class="page-header">
+        <div class="page-header-left d-flex align-items-center">
+            <div class="page-header-title">
+                <h5 class="m-b-10">Contact Messages</h5>
+            </div>
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'admin_index' %}">Home</a></li>
+                <li class="breadcrumb-item">Contact Messages</li>
+            </ul>
+        </div>
+        <div class="page-header-right">
+            {% with new_count=contact_msgs.count %}
+            <span class="badge bg-danger fs-6">{{ new_count }} message{{ new_count|pluralize }}</span>
+            {% endwith %}
+        </div>
+    </div>
+
+    <section class="section mt-4 mx-auto">
+        <div class="card">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>#</th>
+                                <th>From</th>
+                                <th>Reason</th>
+                                <th>Subject</th>
+                                <th>Message</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for msg in contact_msgs %}
+                            <tr class="{% if msg.status == 'new' %}table-warning{% endif %}">
+                                <td>{{ forloop.counter }}</td>
+                                <td>
+                                    <strong>{{ msg.name }}</strong><br>
+                                    <small class="text-muted">{{ msg.email }}</small>
+                                    {% if msg.phone %}<br><small class="text-muted">{{ msg.phone }}</small>{% endif %}
+                                </td>
+                                <td>
+                                    <span class="badge bg-light text-dark">
+                                        {% if msg.reason == 'order' %}📦 Order
+                                        {% elif msg.reason == 'payment' %}💳 Payment
+                                        {% elif msg.reason == 'delivery' %}🚚 Delivery
+                                        {% elif msg.reason == 'product' %}🛍️ Product
+                                        {% elif msg.reason == 'refund' %}💰 Refund
+                                        {% else %}💬 Other{% endif %}
+                                    </span>
+                                </td>
+                                <td><strong>{{ msg.subject }}</strong></td>
+                                <td>
+                                    <span data-bs-toggle="tooltip" title="{{ msg.message }}">
+                                        {{ msg.message|truncatechars:55 }}
+                                    </span>
+                                </td>
+                                <td>
+                                    {% if msg.status == 'new' %}
+                                        <span class="badge bg-warning text-dark">🆕 New</span>
+                                    {% elif msg.status == 'read' %}
+                                        <span class="badge bg-info text-dark">👀 Read</span>
+                                    {% else %}
+                                        <span class="badge bg-success">✅ Replied</span>
+                                    {% endif %}
+                                </td>
+                                <td><small class="text-muted">{{ msg.submitted_at|date:"d M Y, h:i A" }}</small></td>
+                                <td>
+                                    <div class="d-flex gap-1 flex-wrap">
+                                        {% if msg.status == 'new' %}
+                                        <form method="post" action="{% url 'admin_contact_status' msg.id %}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="status" value="read">
+                                            <button class="btn btn-xs btn-outline-info" style="font-size:.72rem;padding:2px 8px">Mark Read</button>
+                                        </form>
+                                        {% endif %}
+                                        {% if msg.status != 'replied' %}
+                                        <form method="post" action="{% url 'admin_contact_status' msg.id %}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="status" value="replied">
+                                            <button class="btn btn-xs btn-outline-success" style="font-size:.72rem;padding:2px 8px">Mark Replied</button>
+                                        </form>
+                                        {% endif %}
+                                        <a href="mailto:{{ msg.email }}?subject=Re: {{ msg.subject }}"
+                                           class="btn btn-xs btn-outline-primary" style="font-size:.72rem;padding:2px 8px">
+                                            <i class="bi bi-reply"></i> Reply
+                                        </a>
+                                        <form method="post" action="{% url 'admin_contact_delete' msg.id %}"
+                                              class="d-inline"
+                                              onsubmit="return confirm('Delete this message? This cannot be undone.')">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-xs btn-outline-danger" style="font-size:.72rem;padding:2px 8px">
+                                                <i class="bi bi-trash"></i> Delete
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="8" class="text-center text-muted py-5">
+                                    <i class="bi bi-inbox fs-1"></i>
+                                    <p class="mt-3">No contact messages yet. They'll appear here when customers submit the contact form.</p>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+// Bootstrap tooltips
+var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+tooltipTriggerList.forEach(function(el){ new bootstrap.Tooltip(el); });
+</script>
+
+{% endblock %}

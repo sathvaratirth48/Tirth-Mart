@@ -1,0 +1,99 @@
+/* ==========================================================================
+   Tirth Mart - Responsive Stylesheet (Mobile-first enhancements)
+   ========================================================================== */
+
+/* Large desktops down */
+@media (max-width: 1199px) {
+  .hero-slide { min-height: 440px; }
+}
+
+/* Tablets / small desktops */
+@media (max-width: 991px) {
+  .section { padding: 56px 0; }
+
+  /* show hamburger, hide desktop nav + search */
+  .menu-toggle { display: inline-flex; }
+  .main-nav { display: none; }
+  .header-search-desktop { display: none; }
+
+  .header-main {
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .hero-content { max-width: 100%; }
+  .hero-slide::before {
+    background: linear-gradient(90deg, rgba(6, 77, 90, 0.88) 0%, rgba(6, 77, 90, 0.6) 100%);
+  }
+
+  .summary-card { position: static; }
+
+  .newsletter { padding: 36px 24px; }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  .section { padding: 44px 0; }
+  .section-head { margin-bottom: 32px; }
+
+  .topbar-links { display: none; }
+  .topbar .offer { font-size: 0.78rem; }
+
+  .header-actions { gap: 0; }
+  .icon-btn { width: 42px; height: 42px; font-size: 1.15rem; }
+
+  .logo { font-size: 1.3rem; }
+
+  .hero-slide { min-height: 400px; }
+  .hero-content h1 { font-size: 1.8rem; }
+  .hero-content p { font-size: 0.98rem; }
+  .hero-dots { display: none; }
+
+  .feature-item { padding: 16px 8px; }
+
+  .newsletter-form { flex-direction: column; border-radius: var(--radius); background: transparent; padding: 0; gap: 10px; }
+  .newsletter-form input { background: #fff; border-radius: 40px; }
+  .newsletter-form .btn { justify-content: center; }
+
+  .footer-bottom { flex-direction: column; text-align: center; }
+
+  /* cart table -> stacked cards */
+  .cart-table thead { display: none; }
+  .cart-table, .cart-table tbody, .cart-table tr, .cart-table td { display: block; width: 100%; }
+  .cart-table tr {
+    border-top: 1px solid var(--line);
+    padding: 12px 0;
+  }
+  .cart-table tr:first-child { border-top: none; }
+  .cart-table td {
+    border: none;
+    padding: 6px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .cart-table td::before {
+    content: attr(data-label);
+    font-family: var(--font-head);
+    font-weight: 600;
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+  .cart-prod { width: 100%; }
+
+  .pd-buy { width: 100%; }
+  .pd-buy .btn { flex: 1; justify-content: center; }
+
+  .promo-banner { min-height: 180px; padding: 28px 22px; }
+
+  .testi-inner { padding: 26px 20px; }
+  .testi-inner p { font-size: 1rem; }
+}
+
+/* Small mobile */
+@media (max-width: 479px) {
+  .logo span { display: none; }
+  .hero-arrows { bottom: 14px; right: 14px; }
+  .hero-arrows button { width: 40px; height: 40px; }
+  .stat-box .num { font-size: 1.8rem; }
+}

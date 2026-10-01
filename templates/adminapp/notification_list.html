@@ -1,0 +1,86 @@
+{% extends 'adminapp/master.html' %}
+{% load static %}
+{% block content %}
+
+<div class="nxl-content">
+    <div class="page-header">
+        <div class="page-header-left d-flex align-items-center">
+            <div class="page-header-title">
+                <h5 class="m-b-10">Admin Notifications</h5>
+            </div>
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'admin_index' %}">Home</a></li>
+                <li class="breadcrumb-item">Notifications</li>
+            </ul>
+        </div>
+        <div class="page-header-right">
+            <div class="d-flex align-items-center gap-2">
+                <span class="badge bg-danger fs-6">{{ notifications.count }} notifications</span>
+                {% if notifications %}
+                <form method="post" action="{% url 'admin_clear_notifications' %}"
+                      onsubmit="return confirm('Clear all notifications? This cannot be undone.')">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-sm btn-outline-danger">
+                    <i class="bi bi-trash me-1"></i>Clear All
+                  </button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <section class="section mt-4 mx-auto">
+        <div class="row">
+            <div class="col-lg-10 mx-auto">
+                <div class="card">
+                    <div class="card-body p-0">
+                        {% for note in notifications %}
+                        <div class="d-flex align-items-start gap-3 p-3 border-bottom {% if not note.is_read %}bg-light{% endif %}">
+                            <div class="flex-shrink-0 mt-1">
+                                {% if 'New Order' in note.title or '🛒' in note.title %}
+                                    <span class="fs-4">🛒</span>
+                                {% elif 'Payment' in note.title and 'Failed' in note.title %}
+                                    <span class="fs-4">❌</span>
+                                {% elif 'Payment' in note.title %}
+                                    <span class="fs-4">💳</span>
+                                {% elif 'Cancel' in note.title %}
+                                    <span class="fs-4">❌</span>
+                                {% elif 'Delivered' in note.title or 'Deliver' in note.title %}
+                                    <span class="fs-4">✅</span>
+                                {% elif 'Returned' in note.title %}
+                                    <span class="fs-4">📦</span>
+                                {% elif 'Stock' in note.title %}
+                                    <span class="fs-4">⚠️</span>
+                                {% elif 'Customer' in note.title %}
+                                    <span class="fs-4">👥</span>
+                                {% elif 'Assigned' in note.title %}
+                                    <span class="fs-4">🚚</span>
+                                {% else %}
+                                    <span class="fs-4">🔔</span>
+                                {% endif %}
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <h6 class="mb-1 {% if not note.is_read %}fw-bold{% endif %}">{{ note.title }}</h6>
+                                    {% if not note.is_read %}
+                                    <span class="badge bg-primary ms-2" style="font-size:.65rem">New</span>
+                                    {% endif %}
+                                </div>
+                                <p class="mb-1 text-muted small">{{ note.message }}</p>
+                                <small class="text-muted">{{ note.created_at|date:"d M Y, h:i A" }}</small>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="text-center text-muted py-5">
+                            <i class="bi bi-bell-slash fs-1"></i>
+                            <p class="mt-3">No notifications yet. They'll appear here when orders are placed, cancelled, or paid.</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+{% endblock %}

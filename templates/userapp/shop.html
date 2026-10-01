@@ -1,0 +1,134 @@
+{% extends 'userapp/master.html' %}
+{% load static %}
+{% block content %}
+
+<!-- PAGE BANNER -->
+<section class="page-banner">
+  <div class="container">
+    <h1>Our Shop</h1>
+    <div class="breadcrumb-nav"><a href="{% url 'index' %}">Home</a> / <span>Shop</span></div>
+  </div>
+</section>
+
+<!-- SHOP -->
+<section class="section">
+  <div class="container">
+    <form method="get" id="shopFilterForm">
+    <div class="row g-4">
+      <!-- Sidebar -->
+      <div class="col-lg-3">
+        <div class="shop-sidebar">
+
+          {% if q %}<input type="hidden" name="q" value="{{ q }}">{% endif %}
+
+          <div class="filter-block">
+            <h5>Categories</h5>
+            <ul class="filter-list">
+              {% for c in categories %}
+              <li><label>
+                <input type="checkbox" class="filter-cat" name="category" value="{{ c.name }}"
+                       {% if c.name in selected_cats %}checked{% endif %}
+                       onchange="document.getElementById('shopFilterForm').submit()">
+                {{ c.name }} <span class="num">{{ c.products.count }}</span>
+              </label></li>
+              {% endfor %}
+            </ul>
+          </div>
+
+          <div class="filter-block">
+            <h5>Price Range</h5>
+            <div class="d-flex gap-2 align-items-center mb-2">
+              <input type="number" name="min_price" value="{{ min_price }}" placeholder="Min" class="form-control form-control-sm" style="width:90px;">
+              <span>-</span>
+              <input type="number" name="max_price" value="{{ max_price }}" placeholder="Max" class="form-control form-control-sm" style="width:90px;">
+            </div>
+            <button type="submit" class="btn btn-sm btn-outline-peacock w-100">Apply</button>
+          </div>
+
+          <div class="filter-block">
+            <h5>Customer Rating</h5>
+            <ul class="filter-list">
+              <li><label>
+                <input type="radio" name="rating" value="4" {% if rating == "4" %}checked{% endif %}
+                       onchange="document.getElementById('shopFilterForm').submit()">
+                <span class="stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star"></i></span> &amp; up
+              </label></li>
+              <li><label>
+                <input type="radio" name="rating" value="3" {% if rating == "3" %}checked{% endif %}
+                       onchange="document.getElementById('shopFilterForm').submit()">
+                <span class="stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star"></i><i class="bi bi-star"></i></span> &amp; up
+              </label></li>
+              {% if rating %}
+              <li><a href="?{% if q %}q={{ q }}&{% endif %}{% for c in selected_cats %}category={{ c }}&{% endfor %}" class="small text-muted">Clear rating filter</a></li>
+              {% endif %}
+            </ul>
+          </div>
+
+          {% if selected_cats or min_price or max_price or rating or q %}
+          <a href="{% url 'shop_page' %}" class="btn btn-sm btn-outline-danger w-100 mb-3">
+            <i class="bi bi-x-circle me-1"></i>Clear All Filters
+          </a>
+          {% endif %}
+
+          <div class="promo-banner bg-a" style="min-height:auto;padding:24px">
+            <span class="small">Special Deal</span>
+            <h3 style="font-size:1.2rem">Combo Packs from &#8377;299</h3>
+            <a href="{% url 'shop_page' %}?category=Combo+Packs" class="btn btn-light btn-sm">Shop Now</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Products -->
+      <div class="col-lg-9">
+        <div class="shop-toolbar">
+          <span class="result" id="resultCount">Showing {{ products.start_index|default:0 }}–{{ products.end_index|default:0 }} of {{ total_count }} product{{ total_count|pluralize }}</span>
+          <div class="d-flex align-items-center gap-2">
+            <label for="sortSelect" class="result mb-0">Sort by:</label>
+            <select id="sortSelect" name="sort" onchange="document.getElementById('shopFilterForm').submit()">
+              <option value="default" {% if sort == "default" %}selected{% endif %}>Default</option>
+              <option value="low" {% if sort == "low" %}selected{% endif %}>Price: Low to High</option>
+              <option value="high" {% if sort == "high" %}selected{% endif %}>Price: High to Low</option>
+              <option value="rating" {% if sort == "rating" %}selected{% endif %}>Top Rated</option>
+            </select>
+          </div>
+        </div>
+        <div class="row g-3">
+
+          {% for product in products %}
+          <div class="col-md-4">
+            {% include 'userapp/includes/product_card.html' %}
+          </div>
+          {% empty %}
+          <div class="col-12 text-center py-5">
+            <i class="bi bi-search fs-1 text-muted"></i>
+            <p class="mt-3 mb-1">No products match your filters.</p>
+            <a href="{% url 'shop_page' %}" class="btn-outline-custom mt-2">Clear Filters</a>
+          </div>
+          {% endfor %}
+
+        </div>
+
+        {% if products.has_other_pages %}
+        <div class="pagination-wrap">
+          {% if products.has_previous %}
+          <a href="?{{ querystring }}&page={{ products.previous_page_number }}"><i class="bi bi-chevron-left"></i></a>
+          {% endif %}
+          {% for num in products.paginator.page_range %}
+            {% if num == products.number %}
+            <a href="?{{ querystring }}&page={{ num }}" class="active">{{ num }}</a>
+            {% else %}
+            <a href="?{{ querystring }}&page={{ num }}">{{ num }}</a>
+            {% endif %}
+          {% endfor %}
+          {% if products.has_next %}
+          <a href="?{{ querystring }}&page={{ products.next_page_number }}"><i class="bi bi-chevron-right"></i></a>
+          {% endif %}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+    </form>
+  </div>
+</section>
+
+{% endblock %}
